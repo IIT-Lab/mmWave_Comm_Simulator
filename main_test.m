@@ -5,11 +5,6 @@ nTx_row = 8;
 nTx_col = 8;
 
 nRx = 1;
-%% Todos today
-% 1. Configure channel -- delay profile vs custom?
-% 3. Customized Radiator?
-% 4. multiple receiver elements??? MIMO???
-% *. Implement Radiator? check radiator first
 
 tic
 for SNR = 5
