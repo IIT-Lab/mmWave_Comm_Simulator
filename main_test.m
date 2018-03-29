@@ -1,6 +1,4 @@
-clear; close all;
-
-% diary('CDL_C_100ns_32Tx.log')
+% clear; close all;
 
 lengthPSDU = 1000;
 nTx_row = 8;
@@ -11,7 +9,7 @@ nTx_col = 8;
 % 3. Customized Radiator?
 % 4. multiple receiver elements?
 
-
+tic
 for SNR = 5
     for MCS = 1
         tx_phy = s_phy_tx( ...
@@ -29,7 +27,7 @@ for SNR = 5
             'numOutputElements_col',    1, ...
             'SNR',                      SNR);
         
-        totPkt = 10;
+        totPkt = 100;
         numErr = 0;
         
         for i = 1 : totPkt
@@ -47,3 +45,4 @@ for SNR = 5
     end
     
 end
+toc
