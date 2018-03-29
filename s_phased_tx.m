@@ -15,14 +15,14 @@ classdef s_phased_tx < matlab.System
         %% Antenna configurations
         numTxElements_row = 8;
         numTxElements_col = 8;
-        txPower = 8; % Watts
-        txGain = 0; %dBW
+        txPower = 8;    % Watts
+        txGain = 0;     % dBW
         
         %% Waveform specifications
-        center_frequency = 60e9;
+        center_frequency = 60.48e9;
         
         %% Vis
-        visualization = true;
+        visualization = false;
     end
     
     properties(DiscreteState)
@@ -38,7 +38,6 @@ classdef s_phased_tx < matlab.System
     end
     
     methods
-        % Constructor
         function obj = s_phased_tx(varargin)
             setProperties(obj,nargin,varargin{:})
         end
@@ -80,10 +79,10 @@ classdef s_phased_tx < matlab.System
                 'CombineRadiatedSignals',   false);
         end
         
-        function txWaveforms = stepImpl(obj, txBits, toRxAngle, varargin)
+        function txWaveforms = stepImpl(obj, txBits, toRxAngle, W)
             
             %% Temp-debug part -- 2 sub array beamformings
-            if nargin == 3 %% W unspecified
+            if isempty(W) %% W unspecified
                 % Hybrid beamforming -- 2 sub arrays
                 numSubarray = 2;
                 numSubElem = obj.numTxElements_col * obj.numTxElements_row / numSubarray;

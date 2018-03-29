@@ -17,7 +17,7 @@ classdef s_phased_channel < matlab.System
         numOutputElements_col = 1;
         numOutputElements_row = 1;
         SNR = 5;
-        center_frequency = 60e9;
+        center_frequency = 60.48e9;
     end
 
     properties(DiscreteState)
