@@ -36,7 +36,7 @@ for SNR = 5
             psdu = randi([0 1], lengthPSDU*8, 1);
             [txSymbols, cfgDMG] = tx_phy(psdu);
             txWaveforms = tx_pha(txSymbols, angleToRx, []);
-            txWaveforms_afterChannel = channel_pha(txWaveforms);
+            txWaveforms_afterChannel = channel_pha(txWaveforms, 1);
             rxSymbols = rx_pha(txWaveforms_afterChannel, angleToRx);
             [psdu_rx, rxflag] = rx_phy(rxSymbols, [], cfgDMG);
             if ~isempty(psdu_rx)
