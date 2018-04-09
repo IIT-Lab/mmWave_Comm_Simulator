@@ -19,12 +19,10 @@ Yes, will be O(n) complexity. Store all user's received signal, combine them in 
 * Small questions regarding 3GPP TR38.901
 
     * *Pathloss* -- which model? Phased Transmitter + Receiver (pre-amp + post-amp noise etc modeling)
-    * Implemented, see *apply_pathloss* function inside *s_phased_channel*
+        * Implemented, see *apply_pathloss* function inside *s_phased_channel*
 
-* Large-scale shadowing?
+    * Large-scale shadowing?
+        * Pending to discuss.
 
-    * Pending to discuss.
-
-* LoS probability?
-
-    * Refer to blockage, section 7.6.4 of TR38.901. Pending to implement.
+    * LoS probability?
+        * Refer to blockage, section 7.6.4 of TR38.901. Pending to implement.
