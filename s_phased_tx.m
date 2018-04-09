@@ -66,9 +66,9 @@ classdef s_phased_tx < matlab.System
                 'PropagationSpeed',         light_speed);
             
             %Gain per antenna element
-            %             obj.transmitter = phased.Transmitter( ...
-            %                 'PeakPower',                obj.txPower / obj.numTxElements, ...
-            %                 'Gain',                     obj.txGain);
+            obj.transmitter = phased.Transmitter( ...
+                'PeakPower',                obj.txPower / obj.numTxElements, ...
+                'Gain',                     obj.txGain);
             
             %Transmit array
             obj.radiator = phased.Radiator( ...
@@ -98,26 +98,26 @@ classdef s_phased_tx < matlab.System
                 
                 % From the system perspective, the effect of the hybrid beamforming can be
                 % represented by hybrid weights as shown below.
-                
                 wT_hybrid = kron(wT_digital, wT_analog);
                 
-                %             % Model signal traveling to mobile by applying a phaseshift on the
-                %             % elements since phased.Radiator does not do it when radiated signals are
-                %             % uncombined.
-                %             wR = obj.steeringvec(obj.center_frequency, -toRxAngle);
-                %             weight = wT_hybrid .* wR;
+                % % Model signal traveling to mobile by applying a phaseshift on the
+                % % elements since phased.Radiator does not do it when radiated signals are
+                % % uncombined.
+                % wR = obj.steeringvec(obj.center_frequency, -toRxAngle);
+                % weight = wT_hybrid .* wR;
                 
-                % Amplify this single carrier signal
-                %             txWaveforms_after_amplify = obj.transmitter(txBits);
                 
                 % then radiate it -- since we uses weights to "mimic" the
                 % boresight, we do not need to steer them physically
                 W = wT_hybrid;
             end
-            %% Simulation part -- When Santi's magic happens
+            %% Radiate signals out of weights
             txWaveforms = obj.radiator(txBits, ...
                 repmat([0; 0], 1, obj.numTxElements_row * obj.numTxElements_col), conj(W));
             
+            %% Amplify those signals through transmitter
+            txWaveforms = obj.transmitter(txWaveforms)
+
             if obj.visualization
                 array_resp = phased.ArrayResponse( ...
                     'SensorArray', obj.antenna_array, ...

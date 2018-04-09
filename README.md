@@ -26,3 +26,5 @@
 
     * LoS probability?
         * Refer to blockage, section 7.6.4 of TR38.901. Pending to implement.
+
+* Quantization effects -- modeling?
