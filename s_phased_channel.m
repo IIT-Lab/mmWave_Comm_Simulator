@@ -58,8 +58,8 @@ classdef s_phased_channel < matlab.System
             
         end
         
-        function rxWaveforms = stepImpl(obj, txWaveforms, distance_3d)
-            rxWaveforms         = obj.CDLChannel(txWaveforms);
+        function [rxWaveforms] = stepImpl(obj, txWaveforms, distance_3d)
+            [rxWaveforms]       = obj.CDLChannel(txWaveforms);
             [~, rxWaveforms]    = apply_pathloss(obj, distance_3d, rxWaveforms);
             rxWaveforms         = obj.AWGNChannel(rxWaveforms);
         end
