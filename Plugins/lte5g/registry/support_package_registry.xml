@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--Copyright 2016-2017 The MathWorks, Inc. -->
+
+<!-- We must update the version every release -->
+<!-- http://sharepoint/dev/pm/rm/supportsoftwareprocessesandreleases/supportsoftwareversioning/default.aspx -->
+
+<RTTPackageRepository>
+    <SupportPackage
+        name="LTE5G"
+        fullname="5G Library for LTE System Toolbox"
+        version="18.1.0"
+        basecode="5GLIBRARY"
+        displayname="5G Library for LTE System Toolbox"
+        infotext="Simulate 3GPP 5G new radio technologies."
+        platform="PCWIN64,GLNXA64,MACI64"
+        visible="1"
+        enable="1"
+        baseproduct="LTE System Toolbox"
+        url="https://www.mathworks.com"
+        downloadurl=""
+        licenseurl=""
+        supportcategory="software"
+        postinstallcmd="matlab:lte5g.internal.lte5gPostInstallCmd"
+        folder="lte5g"
+        demoxml="lte5gexamples/demos.xml">
+    </SupportPackage>
+</RTTPackageRepository>

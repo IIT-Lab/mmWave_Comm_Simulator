@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- LTE 5G Examples   -->
+<!-- Copyright 2016-2018 The MathWorks, Inc. -->
+<demos>
+    <name>5G Library for LTE System</name>
+    <type>toolbox</type>
+    <icon>HelpIcon.DEMOS</icon>
+    <description isCdata="no">
+        <p>
+            Model 3GPP 5G new radio systems with LTE System Toolbox&#8482;
+        </p>
+        <p>
+            A new 3GPP 5G Library for simulating new radio technologies, including CDL and TDL channel models and an LTE-based reference design 5G link with new waveforms.
+        </p>
+        <p>
+            <h3>Documentation</h3>
+            <ul><li><a href="matlab:open('5G_Library_LTE_System_Toolbox_book.pdf')">5G Library for LTE System Toolbox</a></li></ul>
+        </p>
+    </description>
+    <website>
+        <a href="https://www.mathworks.com/pl_lte">Product page at mathworks.com</a>
+    </website>   
+    <demosection>
+        <label>Channel Modeling</label>
+        <demoitem>
+            <label>3GPP 5G NR PDSCH Throughput Simulation</label>
+            <dependency>LTE System Toolbox</dependency>
+            <type>M-file</type>
+            <source>NewRadio5GLinkExample</source>
+        </demoitem>
+    </demosection>
+        <demosection>
+        <label>Channel Coding</label>
+        <demoitem>
+            <label>5G Polar Coding</label>
+            <dependency>LTE System Toolbox</dependency>
+            <type>M-file</type>
+            <source>NewRadio5GPolarCodingExample</source>
+        </demoitem>
+    </demosection>
+    <demosection>
+        <label>Waveforms</label>
+        <demoitem>
+            <label>5G Waveform Spectral Analysis</label>
+            <dependency>LTE System Toolbox</dependency>
+            <type>M-file</type>
+            <source>NewRadio5GSpectralAnalysisExample</source>
+        </demoitem>
+    </demosection>
+</demos>

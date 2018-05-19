@@ -1,0 +1,46 @@
+%h5gSSS Secondary synchronization signal
+%
+%   TS 38.211 section 7.4.2.3.
+%
+%   Example:
+%   % Generate the secondary synchronization signal symbols (BPSK) for a
+%   % given cell ID. The SSS is transmitted in symbol #2 of a SS/PBCH block.
+%   
+%   sss = h5gSSS(struct('NCellID',1));
+% 
+%   See also h5gSSSIndices, h5gPSS, h5gPBCH.
+
+%   Copyright 2018 The MathWorks, Inc.
+
+function sss = h5gSSS(gnb) 
+
+    dsss0 = [...
+    -1   1   1   1   1   1   1  -1   1   1  -1   1   1  -1  -1   1  -1   1   1 ...
+    -1  -1  -1  -1   1  -1  -1  -1   1   1   1   1  -1  -1  -1  -1  -1  -1  -1 ...
+     1   1   1  -1  -1  -1   1  -1  -1   1   1   1  -1   1  -1   1   1  -1   1 ...
+    -1  -1  -1  -1  -1   1  -1   1  -1   1  -1   1   1   1   1  -1   1  -1  -1 ...
+     1  -1  -1  -1  -1   1   1  -1  -1  -1   1   1  -1   1  -1   1  -1  -1   1 ...
+     1  -1  -1   1   1   1   1   1  -1  -1   1  -1  -1   1  -1   1  -1  -1  -1 ...
+     1  -1   1   1   1  -1  -1   1   1  -1   1   1   1].';
+
+
+    dsss1 = [...
+    -1   1   1   1   1   1   1  -1   1   1   1   1   1  -1  -1   1   1   1   1 ...
+    -1   1  -1   1   1   1  -1  -1  -1  -1   1   1  -1   1   1   1  -1   1  -1 ...
+    -1   1   1  -1  -1  -1   1  -1   1  -1   1   1  -1  -1  -1  -1  -1   1  -1 ...
+     1   1   1   1  -1  -1  -1   1   1   1  -1   1   1  -1   1   1  -1  -1   1 ...
+    -1  -1   1  -1   1  -1  -1   1  -1  -1  -1  -1   1  -1  -1   1   1   1  -1 ...
+    -1   1  -1   1   1  -1   1  -1  -1  -1   1  -1  -1  -1   1   1  -1  -1   1 ...
+     1  -1   1  -1   1  -1   1  -1  -1  -1  -1  -1  -1].'; 
+
+    % Secondary synchronization signal
+    ncellid = gnb.NCellID;   % 1008 unique physical-layer cell identities 
+    n1 = fix(ncellid/3);
+    n2 = mod(ncellid,3);
+    m0 = 15*fix(n1/112) + 5*n2;
+    m1 = mod(n1,112);
+    s0 = dsss0(1+mod(m0:m0+126,127));
+    s1 = dsss1(1+mod(m1:m1+126,127));
+    sss = s0.*s1;
+    
+end

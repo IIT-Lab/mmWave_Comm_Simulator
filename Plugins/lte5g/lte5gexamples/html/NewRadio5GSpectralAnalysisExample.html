@@ -1,0 +1,919 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>5G Waveform Spectral Analysis</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-10-18"><meta name="DC.source" content="NewRadio5GSpectralAnalysisExample.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><style>
+.open_example { 
+    padding:0px 0px 1px 0px;
+    margin:20px;
+    font-size:0.9em;
+    border:1px solid #aeaeae;
+    display:block;
+    float:right;
+    border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px;
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #FFFFFF 0%, #E6E6E6 100%); /* FF3.6+ */	
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#E6E6E6)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #FFFFFF 0%,#E6E6E6 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ffffff 0%,#e6e6e6 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ffffff 0%,#e6e6e6 100%); /* IE10+ */
+    background: linear-gradient(top,  #ffffff 0%,#e6e6e6 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E6E6E6',GradientType=0 ); /* IE6-9 */
+}
+
+.open_example:hover {
+    background: #f3f3f3; /* Old browsers */
+    background: -moz-linear-gradient(top, #f3f3f3 0%, #d7d7d7 100%); /* FF3.6+ */    
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(100%,#d7d7d7)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #f3f3f3 0%,#d7d7d7 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #f3f3f3 0%,#d7d7d7 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #f3f3f3 0%,#d7d7d7 100%); /* IE10+ */
+    background: linear-gradient(top,  #f3f3f3 0%,#d7d7d7 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#d7d7d7',GradientType=0 ); /* IE6-9 */
+} 
+
+.open_example a { 
+    padding:6px 10px; 
+    line-height:130%;
+    text-decoration:none;
+    float:left;
+}
+      </style><div class="open_example"><a href="matlab:edit NewRadio5GSpectralAnalysisExample">Open this Example</a></div><div class="content"><h1>5G Waveform Spectral Analysis</h1><!--introduction--><p>This example analyzes the spectral characteristics of the following waveforms: W-OFDM, F-OFDM and CP-OFDM. These waveforms are analyzed in terms of the amount of power leaked into neighboring bands and their RMS EVM. Two cases are considered: a linear case and a case where PA (power amplifier) non-linearities are introduced.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">New Radio Waveforms</a></li><li><a href="#2">Out of Band Emissions Without PA Clipping</a></li><li><a href="#4">Out of Band Emissions with PA Clipping</a></li><li><a href="#6">Change Bandwidth and Subcarrier Spacing</a></li><li><a href="#7">Appendix</a></li><li><a href="#8">Local Functions</a></li></ul></div><h2 id="1">New Radio Waveforms</h2><p>5G will use OFDM with cyclic prefix as modulation scheme. In order to increase spectral efficiency, out of band emissions must be controlled. LTE already implements filtering and windowing to control spectral leakage. However, in LTE, a bandwidth occupancy limit of 90% is mandatory. For example, for a bandwidth of 20 MHz, an LTE signal is transmitted using 100 resource blocks (RBs), which occupy a total of 100*12*15e3 = 18 MHz (12 carriers per RB and 15 kHz carrier spacing). In 5G, the 90% bandwidth occupancy limitation does not apply, potentially enabling an increase in spectral efficiency.</p><p>In this example you can explore the effect of using different bandwidth occupancies for the new proposed waveforms (W-OFDM and F-OFDM) and the effect of chosen parameters in terms of:</p><div><ul><li>Waveform quality: EVM</li><li>Amount of power leaked to neighboring bands</li></ul></div><p>This example supports the following waveforms:</p><div><ul><li>W-OFDM</li><li>F-OFDM</li><li>CP-OFDM (this is an LTE waveform, which includes filtering to meet the LTE ACLR requirements)</li></ul></div><pre class="codeinput"><span class="comment">% Waveform types</span>
+waveforms = {<span class="string">'W-OFDM'</span>,<span class="string">'F-OFDM'</span>,<span class="string">'CP-OFDM'</span>};
+
+<span class="comment">% Bandwidths for each of the waveforms in RBs. 5G is not limited to 90%</span>
+<span class="comment">% bandwidth occupancy.</span>
+NDLRBs = [108 108 100];
+</pre><h2 id="2">Out of Band Emissions Without PA Clipping</h2><p>With increased bandwidth occupancy, out of band emissions have to be controlled. In 5G, some filtering and windowing techniques have been proposed, such as W-OFDM and F-OFDM. The figure below shows the spectrum at the band edge of a 20 MHz LTE signal (CP-OFDM) using 100 RBs. It also shows the spectrum of W-OFDM and F-OFDM signals occupying 108 RBs. Note that the LTE signal (CP-OFDM) has been filtered to meet the LTE out of band ACLR requirements. Observe that the W-OFDM and F-OFDM waveforms use more bandwidth, potentially increasing the spectral efficiency.</p><pre class="codeinput">clipping = false;
+<span class="comment">% W-OFDM</span>
+[~, WOFDMspectrum, WOFDMfreq, evmWOFDM] = generateLTE5GWaveform(<span class="string">'W-OFDM'</span>, NDLRBs(1),clipping);
+<span class="comment">% F-OFDM</span>
+[~, FOFDMspectrum, ~, evmFOFDM] = generateLTE5GWaveform(<span class="string">'F-OFDM'</span>, NDLRBs(2),clipping);
+<span class="comment">% CP-OFDM</span>
+[~, CPOFDMspectrum, ~, evmCPOFDM] = generateLTE5GWaveform(<span class="string">'CP-OFDM'</span>, NDLRBs(3),clipping);
+
+<span class="comment">% Bandwith in Hz from NDLRB</span>
+bandwidth = hNRBToBandwidth(NDLRBs(strcmpi(waveforms,<span class="string">'CP-OFDM'</span>)))*1e6;
+hNRWaveformsPlotBWOccupancy(WOFDMfreq,[WOFDMspectrum FOFDMspectrum CPOFDMspectrum],waveforms,NDLRBs,bandwidth)
+</pre><img vspace="5" hspace="5" src="NewRadio5GSpectralAnalysisExample_01.png" alt=""> <p>One of the challenges in 5G design is to produce the right amount of out of band emissions, i.e. what filter to use in F-OFDM and the level of windowing and symbol overlap in W-OFDM. The figure below shows the spectrum at the edge of the occupied band (100 RBs for CP-OFDM and 108 RBs for W-OFDM and F-OFDM). It also shows the spectrum of the signal leaking into the neighboring band. The legend displays the EVM RMS and the power leaked in the 5 MHz next to the band of interest, i.e. between 10 MHz and 15 MHz in a double sided spectrum for a 20 MHz channel.</p><pre class="codeinput">hNRWaveformsPlotSpectrumEVMLeakage(WOFDMfreq,[WOFDMspectrum FOFDMspectrum CPOFDMspectrum],NDLRBs,waveforms,[evmWOFDM, evmFOFDM,evmCPOFDM],<span class="string">'Spectrum (no PA clipping)'</span>);
+</pre><img vspace="5" hspace="5" src="NewRadio5GSpectralAnalysisExample_02.png" alt=""> <h2 id="4">Out of Band Emissions with PA Clipping</h2><p>The figure above may indicate that F-OFDM does a better job than W-OFDM in reducing the amount of out of band emissions. However, when considering the non-linearities of a power amplifier, we can see that the benefits of using F-OFDM against W-OFDM are reduced (see below). Moreover, the filtering operation in F-OFDM may result in higher computational complexity when compared to time domain windowing (W-OFDM).</p><pre class="codeinput">clipping = true;
+<span class="comment">% W-OFDM</span>
+[~, WOFDMspectrum, WOFDMfreq, evmWOFDM] = generateLTE5GWaveform(<span class="string">'W-OFDM'</span>, NDLRBs(1),clipping);
+<span class="comment">% F-OFDM</span>
+[~, FOFDMspectrum, ~, evmFOFDM] = generateLTE5GWaveform(<span class="string">'F-OFDM'</span>, NDLRBs(2),clipping);
+<span class="comment">% CP-OFDM</span>
+[~, CPOFDMspectrum, ~, evmCPOFDM] = generateLTE5GWaveform(<span class="string">'CP-OFDM'</span>, NDLRBs(3),clipping);
+
+hNRWaveformsPlotSpectrumEVMLeakage(WOFDMfreq,[WOFDMspectrum FOFDMspectrum CPOFDMspectrum],NDLRBs,waveforms,[evmWOFDM, evmFOFDM,evmCPOFDM],<span class="string">'Spectrum (with PA clipping)'</span>);
+</pre><img vspace="5" hspace="5" src="NewRadio5GSpectralAnalysisExample_03.png" alt=""> <p>Filtering and windowing can result in degradation of the quality of the signal, this is measured via EVM, which is also shown in the figures above. The value displayed is EVM RMS.</p><p>The figures above were generated using a 513 tap filter for F-OFDM and windowing with an alpha factor of 0.11.</p><h2 id="6">Change Bandwidth and Subcarrier Spacing</h2><p>The code below shows how to change the subcarrier spacing and the number of allocated resource blocks. In this example, we have selected a total of 270 resource blocks with a subcarrier spacing of 120 kHz. This results in an occupied bandwidth of 388.8 MHz, i.e. 97.2% bandwidth occupancy for an overall available bandwidth of 400 MHz.</p><pre class="codeinput">clipping = true;
+mu = 3;
+subcarrierSpacing = 2.^mu*15; <span class="comment">% in kHz</span>
+NDLRB = 270;
+[~, WOFDMspectrum, WOFDMfreq] = generate5GWaveform(<span class="string">'W-OFDM'</span>,NDLRB,subcarrierSpacing, clipping);
+
+hNRWaveformsPlotDoubleSidedSpectrum(WOFDMfreq,WOFDMspectrum,NDLRB,subcarrierSpacing,<span class="string">'Spectrum (with PA clipping)'</span>);
+</pre><img vspace="5" hspace="5" src="NewRadio5GSpectralAnalysisExample_04.png" alt=""> <h2 id="7">Appendix</h2><p>This example uses the following local functions:</p><div><ul><li><tt>generateLTE5GWaveform</tt>: generates a W-OFDM or F-OFDM 5G waveform based on an LTE resource grid (LTE numerology, PDSCH and reference signals).</li><li><tt>generate5GWaveform</tt>: generates a W-OFDM or F-OFDM 5G waveform based on a resource grid of any size and with variable subcarrier spacing. The grid is filled with random data.</li><li><tt>cpofdmFilter</tt>: Applies filtering to a CP-OFDM waveform to meet the LTE ACLR requirements.</li><li><tt>applyNonLinearity</tt>: Apply PA non-linearity clipping to a waveform.</li><li><tt>estimateSpectrum</tt>: Estimate power spectrum of a waveform.</li><li><tt>measureLTEEVM</tt>: Measure the EVM of an LTE based waveform (requires reference signals).</li><li><tt>hNRWaveformsPlotBWOccupancy</tt>: Plots the bandwidth occupancy of the input waveform.</li><li><tt>hNRWaveformsPlotSpectrumEVMLeakage</tt>: Plots the spectrum of the waveform and displays the EVM and spectral leakage.</li><li><tt>hNRWaveformsPlotDoubleSidedSpectrum</tt>: Plots the double sided spectrum of a waveform with bandwidth annotations.</li><li><tt>hNRWaveformsPlotZoomedSpectrum</tt>: Plots the spectrum of a waveform zooms into the specified frequency range.</li></ul></div><p>This example uses the following helper functions:</p><div><ul><li><a href="matlab:edit('hNRBToBandwidth.m')">hNRBToBandwidth.m</a></li><li><a href="matlab:edit('h5gOFDMModulate.m')">h5gOFDMModulate.m</a></li><li><a href="matlab:edit('h5gOFDMInfo.m')">h5gOFDMInfo.m</a></li><li><a href="matlab:edit('h5gOFDMDemodulate.m')">h5gOFDMDemodulate.m</a></li></ul></div><h2 id="8">Local Functions</h2><pre class="codeinput"><span class="comment">% Generate a 5G waveform based on an LTE resource grid. The resource grid</span>
+<span class="comment">% is filled with a full allocation PDSCH, cell specific reference symbols</span>
+<span class="comment">% and the control region. Supported waveforms are W-OFDM, F-OFDM and</span>
+<span class="comment">% CP-OFDM. The function returns the generated waveform, the power spectrum</span>
+<span class="comment">% and the corresponding frequency vector. The function also calculates the</span>
+<span class="comment">% EVM of the generated waveform. This is achieved by applying the</span>
+<span class="comment">% corresponding demodulation (CP-OFDM, W-OFDM or F-OFDM), estimating the</span>
+<span class="comment">% channel at the location of the reference symbols, applying ZF</span>
+<span class="comment">% equalization and measuring EVM on the resulting signal.</span>
+<span class="keyword">function</span> [waveform, P, f, evm] = generateLTE5GWaveform(waveformType, NDLRB, clipping)
+
+    <span class="comment">% Configuration structure</span>
+    rmc = struct();
+    rmc.NDLRB = NDLRB;
+    rmc.PDSCH.PRBSet = (0:rmc.NDLRB-1).';
+    <span class="comment">%rmc.PDSCH.TargetCodeRate = 0.5;</span>
+
+    gnb = lteRMCDL(rmc);
+    gnb.WaveformType = waveformType;
+    gnb.SubcarrierSpacing = 15; <span class="comment">% kHz</span>
+
+    <span class="keyword">switch</span>(gnb.WaveformType)
+        <span class="keyword">case</span> <span class="string">'W-OFDM'</span>
+            gnb.Alpha = 0.11;
+        <span class="keyword">case</span> <span class="string">'F-OFDM'</span>
+            gnb.FilterLength = 513;
+            gnb.ToneOffset = 2.5;
+    <span class="keyword">end</span>
+
+    <span class="comment">% Generate resource grid</span>
+    data = [1; 0; 0; 1];
+    [~,txgrid] = lteRMCDLTool(gnb,data);
+
+    <span class="comment">% OFDM modulation (W-OFDM, F-OFDM, CP-OFDM)</span>
+    [waveform,txinfo] = h5gOFDMModulate(gnb,txgrid);
+
+    <span class="comment">% LTE case: filter CP-OFDM signal to meet eUTRA ACLR requirements</span>
+    <span class="keyword">if</span> (strcmpi(gnb.WaveformType,<span class="string">'CP-OFDM'</span>))
+        waveform = cpofdmFilter(gnb,txinfo,waveform);
+    <span class="keyword">end</span>
+
+    <span class="comment">% Oversampling ratio</span>
+    OSR = 4;
+
+	<span class="comment">% Upsample waveform by OSR</span>
+    oversampled = resample(waveform,OSR,1);
+
+    <span class="comment">% Apply PA non-linear clipping</span>
+    <span class="keyword">if</span> (clipping)
+        oversampled = applyNonLinearity(oversampled);
+    <span class="keyword">end</span>
+
+    <span class="comment">% Estimate power spectrum</span>
+    [P,f] = estimateSpectrum(oversampled,txinfo.SamplingRate*OSR);
+
+    <span class="comment">% Downsample waveform by OSR to measure EVM</span>
+    rxwaveform = resample(oversampled,1,OSR);
+
+    <span class="comment">% EVM measurement</span>
+    evm = measureLTEEVM(gnb,rxwaveform,txgrid);
+
+<span class="keyword">end</span>
+
+<span class="comment">% Generate a 5G waveform using a resource grid of any size with variable</span>
+<span class="comment">% subcarrier spacing. Supported waveforms are W-OFDM, F-OFDM and CP-OFDM.</span>
+<span class="comment">% the function returns the generated waveform, the power spectrum and the</span>
+<span class="comment">% associated frequency vector. The resource grid is filled with random</span>
+<span class="comment">% 16QAM symbols. This function does not use any LTE specific physical</span>
+<span class="comment">% signals or channels.</span>
+<span class="keyword">function</span> [waveform, P, f] = generate5GWaveform(waveformType, NDLRB, subcarrierSpacing, clipping)
+
+    gnb = struct();
+    gnb.NDLRB = NDLRB;
+    gnb.SubcarrierSpacing = subcarrierSpacing;
+    gnb.CellRefP = 1;
+    gnb.CyclicPrefix = <span class="string">'Normal'</span>;
+    gnb.TotSubframes = 1;
+
+    gnb.WaveformType = waveformType;
+
+    <span class="keyword">switch</span>(gnb.WaveformType)
+        <span class="keyword">case</span> <span class="string">'W-OFDM'</span>
+            gnb.Alpha = 0.11;
+        <span class="keyword">case</span> <span class="string">'F-OFDM'</span>
+            gnb.FilterLength = 513;
+            gnb.ToneOffset = 2.5;
+    <span class="keyword">end</span>
+
+    <span class="comment">% Empty grid</span>
+    ofdmInfo = h5gOFDMInfo(gnb);
+    txgrid = zeros(ofdmInfo.NSubcarriers,ofdmInfo.SymbolsPerSubframe*gnb.TotSubframes,gnb.CellRefP);
+    nSymbols = numel(txgrid);
+
+    <span class="comment">% Generate random bits assuming 16QAM</span>
+    nBits = 4*nSymbols;
+    bits = randi([0,1],1,nBits);
+
+    symbols = lteSymbolModulate(bits,<span class="string">'16QAM'</span>);
+    txgrid(:) = symbols;
+
+    <span class="comment">% OFDM modulation (W-OFDM, F-OFDM, CP-OFDM)</span>
+    [waveform,txinfo] = h5gOFDMModulate(gnb,txgrid);
+
+    <span class="comment">% LTE case: filter CP-OFDM signal to meet eUTRA ACLR requirements</span>
+    <span class="keyword">if</span> (strcmpi(gnb.WaveformType,<span class="string">'CP-OFDM'</span>))
+        waveform = cpofdmFilter(gnb,txinfo,waveform);
+    <span class="keyword">end</span>
+
+	<span class="comment">% Oversampling ratio</span>
+    OSR = 4;
+
+    <span class="comment">% Upsample waveform by OSR</span>
+    oversampled = resample(waveform,OSR,1);
+
+    <span class="comment">% Apply PA non-linear clipping</span>
+    <span class="keyword">if</span> (clipping)
+        oversampled = applyNonLinearity(oversampled);
+    <span class="keyword">end</span>
+
+    <span class="comment">% Estimate power spectrum</span>
+    [P,f] = estimateSpectrum(oversampled,txinfo.SamplingRate*OSR);
+
+<span class="keyword">end</span>
+
+<span class="comment">% Apply filtering to CP-OFDM waveform. This is based on the filtering</span>
+<span class="comment">% required to meet the ACLR values in an LTE signal.</span>
+<span class="keyword">function</span> filtered = cpofdmFilter(gnb,txinfo,inWaveform)
+
+    lpFilter = dsp.LowpassFilter;
+    lpFilter.SampleRate = txinfo.SamplingRate;
+    bandwidthConfig = gnb.NDLRB * 12 * gnb.SubcarrierSpacing * 1e3;
+    lpFilter.PassbandFrequency = bandwidthConfig / 2;
+    bandwidth = hNRBToBandwidth(gnb.NDLRB)*1e6;
+    lpFilter.StopbandFrequency = bandwidth / 2;
+    fir = getFilter(lpFilter);
+    tau = floor(length(fir.Numerator)/2);
+    filtered = lpFilter([inWaveform; zeros(tau,size(inWaveform,2))]);
+    filtered = filtered(1+tau:end,:);
+
+<span class="keyword">end</span>
+
+<span class="comment">% Apply PA non-linear clipping</span>
+<span class="keyword">function</span> clipped = applyNonLinearity(waveform)
+
+    nonLinearity = comm.MemorylessNonlinearity;
+    nonLinearity.Method = <span class="string">'Rapp model'</span>;
+    nonLinearity.LinearGain = -6;
+    nonLinearity.Smoothness = 0.8;
+    clipped = nonLinearity(waveform);
+
+<span class="keyword">end</span>
+
+<span class="comment">% Estimate power spectrum of the provided waveform. This function estimates</span>
+<span class="comment">% the spectrum of the input waveform. It returns the estimated power</span>
+<span class="comment">% spectrum and the associated frequency locations.</span>
+<span class="keyword">function</span> [P,f] = estimateSpectrum(waveform,samplingRate)
+
+    <span class="comment">% Estimate spectrum</span>
+    spectrumEstimator = dsp.SpectrumEstimator;
+    spectrumEstimator.SampleRate = samplingRate;
+    spectrumEstimator.FFTLengthSource = <span class="string">'Property'</span>;
+    spectrumEstimator.FFTLength = 4096;
+    spectrumEstimator.SpectralAverages = length(waveform)/spectrumEstimator.FFTLength;
+    spectrumEstimator.Window = <span class="string">'Flat Top'</span>;
+    spectrumEstimator.FrequencyRange = <span class="string">'centered'</span>;
+
+    P = spectrumEstimator(waveform) * 1e3; <span class="comment">% in dBm</span>
+    f = getFrequencyVector(spectrumEstimator); <span class="comment">% in Hz</span>
+
+<span class="keyword">end</span>
+
+<span class="comment">% Measure the EVM of the input waveform based on the values of the symbols</span>
+<span class="comment">% in txgrid.</span>
+<span class="keyword">function</span> evm = measureLTEEVM(gnb,rxwaveform,txgrid)
+
+    rxgrid = h5gOFDMDemodulate(gnb,rxwaveform);
+    pdschIndices = ltePDSCHIndices(gnb,gnb.PDSCH,gnb.PDSCH.PRBSet);
+    refSymbols = txgrid(pdschIndices);
+    hest = lteDLChannelEstimate(gnb,rxgrid);
+    eqgrid = lteEqualizeZF(rxgrid,hest);
+    pdschRxEq = lteExtractResources(pdschIndices,eqgrid*(10^(-gnb.PDSCH.Rho/20)));
+    evm = lteEVM(pdschRxEq,refSymbols);
+
+<span class="keyword">end</span>
+
+<span class="comment">% Plot the spectrum P in the locations f. Display the legend specified in</span>
+<span class="comment">% input argument plotLegends and plot markers for the input bandwidth.</span>
+<span class="comment">% Multiple waveforms can be analyzed by passing f, P and waveformType as</span>
+<span class="comment">% cell arrays.</span>
+<span class="keyword">function</span> hNRWaveformsPlotBWOccupancy(f,P,plotLegends,NDLRBs,bandwidth)
+
+    figure;
+    grid <span class="string">on</span>;
+    hold <span class="string">on</span>;
+
+    title(<span class="string">'Spectrum'</span>);
+
+    <span class="comment">% Plot the spectrum P and zoom at the edge of the allocated band</span>
+    bandwidth = bandwidth*1e-6; <span class="comment">% in MHz</span>
+    hNRWaveformsPlotZoomedSpectrum(f*1e-6,P,bandwidth/2*0.6,bandwidth/2*1.4)
+
+    h = legend(plotLegends,<span class="string">'Location'</span>,<span class="string">'southwest'</span>);
+    h.AutoUpdate = <span class="string">'off'</span>;
+
+    <span class="comment">% Plot a marker at the edge of the allocated band</span>
+    v = axis;
+    <span class="keyword">for</span> b = [NDLRBs*12*15e3/2 bandwidth/2]
+        plot(repmat(b,1,2),v(3:4),<span class="string">'k:'</span>,<span class="string">'LineWidth'</span>,1.4);
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+
+<span class="comment">% Plot the spectrum P in the locations f. Measure the out of band leaked</span>
+<span class="comment">% power between BW/2 and 1.5*(BW/2) and display it in the legend together</span>
+<span class="comment">% with the provided EVM value. The input argument waveformType contains a</span>
+<span class="comment">% character vector with the type of modulation used (CP-OFDM, W-OFDM or</span>
+<span class="comment">% F-OFDM). The bandwidth BW is calculated from the input parameter NDLRBs.</span>
+<span class="comment">% Multiple waveforms can be analyzed by passing f, P and waveformType as</span>
+<span class="comment">% cell arrays.</span>
+<span class="keyword">function</span> hNRWaveformsPlotSpectrumEVMLeakage(f,P,NDLRBs,waveformType,evm,figureTitle)
+
+    figure;
+    grid <span class="string">on</span>;
+    hold <span class="string">on</span>;
+    title(figureTitle);
+
+    <span class="comment">% Bandwith in MHz from NDLRB</span>
+    bandwidth = hNRBToBandwidth(NDLRBs(strcmpi(waveformType,<span class="string">'CP-OFDM'</span>)));
+
+    <span class="comment">% Out of band leakage measuring interval</span>
+    outBand = [bandwidth/2 1.5*bandwidth/2];
+
+    <span class="comment">% Find f index for out of band leakage measuring interval</span>
+    bwBandEdgeFreqIdx = find(f&gt;=(outBand(1)),1,<span class="string">'first'</span>);
+    bwOutBandFreqIdx = find(f&gt;=(outBand(2)),1,<span class="string">'first'</span>);
+
+    <span class="comment">% Plot power spectrum</span>
+    hNRWaveformsPlotZoomedSpectrum(f*1e-6,P,outBand(1)*0.6,outBand(1)*1.6)
+
+    <span class="comment">% Measure power leakage in out of band measuring interval</span>
+    p = 10*log10(sum(P(bwBandEdgeFreqIdx:bwOutBandFreqIdx,:),1));
+    plotLegends = {};
+    <span class="keyword">for</span> n=1:length(waveformType)
+        legendLabel = waveformType{n};
+        powerLabel = [<span class="string">'P = '</span> num2str(p(n),<span class="string">'%0.1f'</span>) <span class="string">' dBm'</span>];
+        evmLabel = [<span class="string">'EVM = '</span> num2str(evm(n).RMS*100,<span class="string">'%0.2f'</span>) <span class="string">'%'</span>];
+
+        <span class="comment">% Power and EVM plot labels</span>
+        plotLegends = [plotLegends [legendLabel <span class="string">', '</span> evmLabel <span class="string">', '</span> powerLabel]]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+    <span class="keyword">end</span>
+    h = legend(plotLegends,<span class="string">'Location'</span>,<span class="string">'southwest'</span>);
+    h.AutoUpdate = <span class="string">'off'</span>;
+    <span class="comment">% Out of band measuring interval markers</span>
+    v = axis;
+    <span class="keyword">for</span> b = outBand
+        plot(repmat(b,1,2),v(3:4),<span class="string">'k:'</span>,<span class="string">'LineWidth'</span>,2);
+    <span class="keyword">end</span>
+    <span class="comment">% Occupied bandwidth markers</span>
+    <span class="keyword">for</span> b = NDLRBs*12*15e3/2
+        plot(repmat(b,1,2),v(3:4),<span class="string">'k:'</span>);
+    <span class="keyword">end</span>
+    ha = annotation(<span class="string">'doublearrow'</span>);
+    ha.Parent = gca;
+    ha.X = outBand;
+    ha.Y = (v(3)+(v(4)-v(3))*0.8)*[1 1];
+    outBandLabel = num2str((outBand(2)-outBand(1)),<span class="string">'%0.1f'</span>);
+    arrowLabel = [<span class="string">'Neighboring '</span> outBandLabel <span class="string">' MHz channel'</span>];
+    t = text(mean(outBand),(v(3)+(v(4)-v(3))*0.85),arrowLabel);
+    t.HorizontalAlignment = <span class="string">'Center'</span>;
+
+<span class="keyword">end</span>
+
+<span class="comment">% Plot the double sided spectrum P in the locations f. The inputs NDLRB and</span>
+<span class="comment">% subcarrierSpacing are used for the figure annotations.</span>
+<span class="keyword">function</span> hNRWaveformsPlotDoubleSidedSpectrum(f,P,NDLRB,subcarrierSpacing,figureTitle)
+
+    figure;
+    grid <span class="string">on</span>;
+    hold <span class="string">on</span>;
+    title(figureTitle);
+
+    <span class="comment">% Plot power spectrum P and zoom on the edge of the allocated band</span>
+    bw = NDLRB*12*subcarrierSpacing*1e3*1e-6;
+    hNRWaveformsPlotZoomedSpectrum(f*1e-6,P,bw/2*(-1.25),bw/2*1.25)
+
+    legend([num2str(NDLRB) <span class="string">' RBs. Subcarrier spacing: '</span> num2str(subcarrierSpacing) <span class="string">' kHz.'</span>],<span class="string">'Location'</span>,<span class="string">'best'</span>);
+
+    <span class="comment">% Plot an arrow specifying the used bandwidth</span>
+    v = axis;
+    ha = annotation(<span class="string">'doublearrow'</span>);
+    ha.Parent = gca;
+    ha.X = [-1 1]*bw*0.5;
+    ha.Y = (v(4)-(v(4)-v(3))*0.9)*[1 1];
+    bwLabel = [<span class="string">'BW: '</span> num2str(bw,<span class="string">'%0.1f'</span>)];
+    arrowLabel = [num2str(bwLabel) <span class="string">' MHz'</span>];
+    t = text(0,(v(4)-(v(4)-v(3))*0.95),arrowLabel);
+    t.HorizontalAlignment = <span class="string">'Center'</span>;
+
+<span class="keyword">end</span>
+
+<span class="comment">% Plot the spectrum P in the locations f and zoom into the [xmin xmax]</span>
+<span class="comment">% range.</span>
+<span class="keyword">function</span> hNRWaveformsPlotZoomedSpectrum(f,P,xmin,xmax)
+
+    plot(f,10*log10(P));
+    v = axis;
+    axis([xmin xmax v(3) v(4)]);
+    xlabel(<span class="string">'Frequency (MHz)'</span>)
+    ylabel(<span class="string">'dBm'</span>);
+
+<span class="keyword">end</span>
+</pre><p class="footer">Copyright 2017 The MathWorks, Inc.<br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br><br>
+		  MATLAB and Simulink are registered trademarks of The MathWorks, Inc.  Please see <a href="https://www.mathworks.com/trademarks">www.mathworks.com/trademarks</a> for a list of other trademarks owned by The MathWorks, Inc.  Other product or brand names are trademarks or registered trademarks of their respective owners.
+      </p></div><!--
+##### SOURCE BEGIN #####
+%% 5G Waveform Spectral Analysis  
+%
+% This example analyzes the spectral characteristics of the following
+% waveforms: W-OFDM, F-OFDM and CP-OFDM. These waveforms are analyzed in
+% terms of the amount of power leaked into neighboring bands and their RMS
+% EVM. Two cases are considered: a linear case and a case where PA (power
+% amplifier) non-linearities are introduced.
+
+% Copyright 2017 The MathWorks, Inc.
+
+%% New Radio Waveforms
+% 5G will use OFDM with cyclic prefix as modulation scheme. In order to
+% increase spectral efficiency, out of band emissions must be controlled.
+% LTE already implements filtering and windowing to control spectral
+% leakage. However, in LTE, a bandwidth occupancy limit of 90% is
+% mandatory. For example, for a bandwidth of 20 MHz, an LTE signal is
+% transmitted using 100 resource blocks (RBs), which occupy a total of
+% 100*12*15e3 = 18 MHz (12 carriers per RB and 15 kHz carrier spacing). In
+% 5G, the 90% bandwidth occupancy limitation does not apply, potentially
+% enabling an increase in spectral efficiency.
+%
+% In this example you can explore the effect of using different bandwidth
+% occupancies for the new proposed waveforms (W-OFDM and F-OFDM) and the
+% effect of chosen parameters in terms of:
+%
+% * Waveform quality: EVM
+% * Amount of power leaked to neighboring bands
+%
+% This example supports the following waveforms:
+%
+% * W-OFDM
+% * F-OFDM
+% * CP-OFDM (this is an LTE waveform, which includes filtering to meet the
+% LTE ACLR requirements)
+
+% Waveform types
+waveforms = {'W-OFDM','F-OFDM','CP-OFDM'};
+
+% Bandwidths for each of the waveforms in RBs. 5G is not limited to 90%
+% bandwidth occupancy.
+NDLRBs = [108 108 100];
+
+%% Out of Band Emissions Without PA Clipping
+% With increased bandwidth occupancy, out of band emissions have to be
+% controlled. In 5G, some filtering and windowing techniques have been
+% proposed, such as W-OFDM and F-OFDM. The figure below shows the spectrum
+% at the band edge of a 20 MHz LTE signal (CP-OFDM) using 100 RBs. It also
+% shows the spectrum of W-OFDM and F-OFDM signals occupying 108 RBs. Note
+% that the LTE signal (CP-OFDM) has been filtered to meet the LTE out of
+% band ACLR requirements. Observe that the W-OFDM and F-OFDM waveforms use
+% more bandwidth, potentially increasing the spectral efficiency.
+
+clipping = false;
+% W-OFDM
+[~, WOFDMspectrum, WOFDMfreq, evmWOFDM] = generateLTE5GWaveform('W-OFDM', NDLRBs(1),clipping);
+% F-OFDM
+[~, FOFDMspectrum, ~, evmFOFDM] = generateLTE5GWaveform('F-OFDM', NDLRBs(2),clipping);
+% CP-OFDM
+[~, CPOFDMspectrum, ~, evmCPOFDM] = generateLTE5GWaveform('CP-OFDM', NDLRBs(3),clipping);
+
+% Bandwith in Hz from NDLRB
+bandwidth = hNRBToBandwidth(NDLRBs(strcmpi(waveforms,'CP-OFDM')))*1e6;
+hNRWaveformsPlotBWOccupancy(WOFDMfreq,[WOFDMspectrum FOFDMspectrum CPOFDMspectrum],waveforms,NDLRBs,bandwidth)
+
+%%
+% One of the challenges in 5G design is to produce the right amount of out
+% of band emissions, i.e. what filter to use in F-OFDM and the level of
+% windowing and symbol overlap in W-OFDM. The figure below shows the
+% spectrum at the edge of the occupied band (100 RBs for CP-OFDM and 108
+% RBs for W-OFDM and F-OFDM). It also shows the spectrum of the signal
+% leaking into the neighboring band. The legend displays the EVM RMS and
+% the power leaked in the 5 MHz next to the band of interest, i.e. between
+% 10 MHz and 15 MHz in a double sided spectrum for a 20 MHz channel.
+
+hNRWaveformsPlotSpectrumEVMLeakage(WOFDMfreq,[WOFDMspectrum FOFDMspectrum CPOFDMspectrum],NDLRBs,waveforms,[evmWOFDM, evmFOFDM,evmCPOFDM],'Spectrum (no PA clipping)');
+
+%% Out of Band Emissions with PA Clipping
+% The figure above may indicate that F-OFDM does a better job than W-OFDM
+% in reducing the amount of out of band emissions. However, when
+% considering the non-linearities of a power amplifier, we can see that the
+% benefits of using F-OFDM against W-OFDM are reduced (see below).
+% Moreover, the filtering operation in F-OFDM may result in higher
+% computational complexity when compared to time domain windowing (W-OFDM).
+
+clipping = true;
+% W-OFDM
+[~, WOFDMspectrum, WOFDMfreq, evmWOFDM] = generateLTE5GWaveform('W-OFDM', NDLRBs(1),clipping);
+% F-OFDM
+[~, FOFDMspectrum, ~, evmFOFDM] = generateLTE5GWaveform('F-OFDM', NDLRBs(2),clipping);
+% CP-OFDM
+[~, CPOFDMspectrum, ~, evmCPOFDM] = generateLTE5GWaveform('CP-OFDM', NDLRBs(3),clipping);
+
+hNRWaveformsPlotSpectrumEVMLeakage(WOFDMfreq,[WOFDMspectrum FOFDMspectrum CPOFDMspectrum],NDLRBs,waveforms,[evmWOFDM, evmFOFDM,evmCPOFDM],'Spectrum (with PA clipping)');
+
+%%
+% Filtering and windowing can result in degradation of the quality of the
+% signal, this is measured via EVM, which is also shown in the figures
+% above. The value displayed is EVM RMS.
+%
+% The figures above were generated using a 513 tap filter for F-OFDM and
+% windowing with an alpha factor of 0.11.
+
+%% Change Bandwidth and Subcarrier Spacing
+% The code below shows how to change the subcarrier spacing and the number
+% of allocated resource blocks. In this example, we have selected a total of
+% 270 resource blocks with a subcarrier spacing of 120 kHz. This results in
+% an occupied bandwidth of 388.8 MHz, i.e. 97.2% bandwidth occupancy for an
+% overall available bandwidth of 400 MHz.
+
+clipping = true;
+mu = 3;
+subcarrierSpacing = 2.^mu*15; % in kHz
+NDLRB = 270;
+[~, WOFDMspectrum, WOFDMfreq] = generate5GWaveform('W-OFDM',NDLRB,subcarrierSpacing, clipping);
+
+hNRWaveformsPlotDoubleSidedSpectrum(WOFDMfreq,WOFDMspectrum,NDLRB,subcarrierSpacing,'Spectrum (with PA clipping)');
+
+%% Appendix
+%
+% This example uses the following local functions:
+%
+% * |generateLTE5GWaveform|: generates a W-OFDM or F-OFDM 5G waveform based
+% on an LTE resource grid (LTE numerology, PDSCH and reference signals).
+% * |generate5GWaveform|: generates a W-OFDM or F-OFDM 5G waveform based
+% on a resource grid of any size and with variable subcarrier spacing. The
+% grid is filled with random data.
+% * |cpofdmFilter|: Applies filtering to a CP-OFDM waveform to meet the LTE
+% ACLR requirements.
+% * |applyNonLinearity|: Apply PA non-linearity clipping to a waveform.
+% * |estimateSpectrum|: Estimate power spectrum of a waveform.
+% * |measureLTEEVM|: Measure the EVM of an LTE based waveform (requires
+% reference signals).
+% * |hNRWaveformsPlotBWOccupancy|: Plots the bandwidth occupancy of the
+% input waveform.
+% * |hNRWaveformsPlotSpectrumEVMLeakage|: Plots the spectrum of the
+% waveform and displays the EVM and spectral leakage.
+% * |hNRWaveformsPlotDoubleSidedSpectrum|: Plots the double sided spectrum
+% of a waveform with bandwidth annotations.
+% * |hNRWaveformsPlotZoomedSpectrum|: Plots the spectrum of a waveform
+% zooms into the specified frequency range.
+%
+% This example uses the following helper functions:
+%
+% * <matlab:edit('hNRBToBandwidth.m') hNRBToBandwidth.m>
+% * <matlab:edit('h5gOFDMModulate.m') h5gOFDMModulate.m>
+% * <matlab:edit('h5gOFDMInfo.m') h5gOFDMInfo.m>
+% * <matlab:edit('h5gOFDMDemodulate.m') h5gOFDMDemodulate.m>
+
+displayEndOfDemoMessage(mfilename)
+
+%% Local Functions
+
+% Generate a 5G waveform based on an LTE resource grid. The resource grid
+% is filled with a full allocation PDSCH, cell specific reference symbols
+% and the control region. Supported waveforms are W-OFDM, F-OFDM and
+% CP-OFDM. The function returns the generated waveform, the power spectrum
+% and the corresponding frequency vector. The function also calculates the
+% EVM of the generated waveform. This is achieved by applying the
+% corresponding demodulation (CP-OFDM, W-OFDM or F-OFDM), estimating the
+% channel at the location of the reference symbols, applying ZF
+% equalization and measuring EVM on the resulting signal.
+function [waveform, P, f, evm] = generateLTE5GWaveform(waveformType, NDLRB, clipping)
+    
+    % Configuration structure
+    rmc = struct();
+    rmc.NDLRB = NDLRB;
+    rmc.PDSCH.PRBSet = (0:rmc.NDLRB-1).';
+    %rmc.PDSCH.TargetCodeRate = 0.5;    
+
+    gnb = lteRMCDL(rmc);
+    gnb.WaveformType = waveformType;
+    gnb.SubcarrierSpacing = 15; % kHz
+    
+    switch(gnb.WaveformType)
+        case 'W-OFDM'
+            gnb.Alpha = 0.11;
+        case 'F-OFDM'
+            gnb.FilterLength = 513;
+            gnb.ToneOffset = 2.5;
+    end
+
+    % Generate resource grid
+    data = [1; 0; 0; 1];
+    [~,txgrid] = lteRMCDLTool(gnb,data);
+
+    % OFDM modulation (W-OFDM, F-OFDM, CP-OFDM)
+    [waveform,txinfo] = h5gOFDMModulate(gnb,txgrid);
+
+    % LTE case: filter CP-OFDM signal to meet eUTRA ACLR requirements
+    if (strcmpi(gnb.WaveformType,'CP-OFDM'))
+        waveform = cpofdmFilter(gnb,txinfo,waveform);
+    end
+
+    % Oversampling ratio
+    OSR = 4;
+    
+	% Upsample waveform by OSR
+    oversampled = resample(waveform,OSR,1);
+    
+    % Apply PA non-linear clipping
+    if (clipping)
+        oversampled = applyNonLinearity(oversampled);
+    end
+    
+    % Estimate power spectrum
+    [P,f] = estimateSpectrum(oversampled,txinfo.SamplingRate*OSR);  
+
+    % Downsample waveform by OSR to measure EVM
+    rxwaveform = resample(oversampled,1,OSR);
+    
+    % EVM measurement
+    evm = measureLTEEVM(gnb,rxwaveform,txgrid);
+
+end
+
+% Generate a 5G waveform using a resource grid of any size with variable
+% subcarrier spacing. Supported waveforms are W-OFDM, F-OFDM and CP-OFDM.
+% the function returns the generated waveform, the power spectrum and the
+% associated frequency vector. The resource grid is filled with random
+% 16QAM symbols. This function does not use any LTE specific physical
+% signals or channels.
+function [waveform, P, f] = generate5GWaveform(waveformType, NDLRB, subcarrierSpacing, clipping)
+    
+    gnb = struct();
+    gnb.NDLRB = NDLRB;
+    gnb.SubcarrierSpacing = subcarrierSpacing;
+    gnb.CellRefP = 1;
+    gnb.CyclicPrefix = 'Normal';    
+    gnb.TotSubframes = 1;
+    
+    gnb.WaveformType = waveformType;
+
+    switch(gnb.WaveformType)
+        case 'W-OFDM'
+            gnb.Alpha = 0.11;
+        case 'F-OFDM'
+            gnb.FilterLength = 513;
+            gnb.ToneOffset = 2.5;
+    end
+    
+    % Empty grid
+    ofdmInfo = h5gOFDMInfo(gnb);
+    txgrid = zeros(ofdmInfo.NSubcarriers,ofdmInfo.SymbolsPerSubframe*gnb.TotSubframes,gnb.CellRefP);
+    nSymbols = numel(txgrid);
+    
+    % Generate random bits assuming 16QAM
+    nBits = 4*nSymbols;    
+    bits = randi([0,1],1,nBits);
+    
+    symbols = lteSymbolModulate(bits,'16QAM');
+    txgrid(:) = symbols;      
+
+    % OFDM modulation (W-OFDM, F-OFDM, CP-OFDM)
+    [waveform,txinfo] = h5gOFDMModulate(gnb,txgrid);
+    
+    % LTE case: filter CP-OFDM signal to meet eUTRA ACLR requirements
+    if (strcmpi(gnb.WaveformType,'CP-OFDM'))
+        waveform = cpofdmFilter(gnb,txinfo,waveform);
+    end
+        
+	% Oversampling ratio
+    OSR = 4;
+    
+    % Upsample waveform by OSR
+    oversampled = resample(waveform,OSR,1);
+    
+    % Apply PA non-linear clipping
+    if (clipping)
+        oversampled = applyNonLinearity(oversampled);
+    end
+    
+    % Estimate power spectrum
+    [P,f] = estimateSpectrum(oversampled,txinfo.SamplingRate*OSR);    
+    
+end
+
+% Apply filtering to CP-OFDM waveform. This is based on the filtering
+% required to meet the ACLR values in an LTE signal.
+function filtered = cpofdmFilter(gnb,txinfo,inWaveform)
+
+    lpFilter = dsp.LowpassFilter;
+    lpFilter.SampleRate = txinfo.SamplingRate;
+    bandwidthConfig = gnb.NDLRB * 12 * gnb.SubcarrierSpacing * 1e3;
+    lpFilter.PassbandFrequency = bandwidthConfig / 2;
+    bandwidth = hNRBToBandwidth(gnb.NDLRB)*1e6;
+    lpFilter.StopbandFrequency = bandwidth / 2;
+    fir = getFilter(lpFilter);
+    tau = floor(length(fir.Numerator)/2);
+    filtered = lpFilter([inWaveform; zeros(tau,size(inWaveform,2))]);
+    filtered = filtered(1+tau:end,:);
+    
+end
+
+% Apply PA non-linear clipping
+function clipped = applyNonLinearity(waveform)    
+
+    nonLinearity = comm.MemorylessNonlinearity;
+    nonLinearity.Method = 'Rapp model';
+    nonLinearity.LinearGain = -6;
+    nonLinearity.Smoothness = 0.8;
+    clipped = nonLinearity(waveform);
+    
+end
+
+% Estimate power spectrum of the provided waveform. This function estimates
+% the spectrum of the input waveform. It returns the estimated power
+% spectrum and the associated frequency locations.
+function [P,f] = estimateSpectrum(waveform,samplingRate)
+
+    % Estimate spectrum
+    spectrumEstimator = dsp.SpectrumEstimator;
+    spectrumEstimator.SampleRate = samplingRate;
+    spectrumEstimator.FFTLengthSource = 'Property';
+    spectrumEstimator.FFTLength = 4096;
+    spectrumEstimator.SpectralAverages = length(waveform)/spectrumEstimator.FFTLength;
+    spectrumEstimator.Window = 'Flat Top';
+    spectrumEstimator.FrequencyRange = 'centered';
+
+    P = spectrumEstimator(waveform) * 1e3; % in dBm
+    f = getFrequencyVector(spectrumEstimator); % in Hz
+    
+end
+
+% Measure the EVM of the input waveform based on the values of the symbols
+% in txgrid.
+function evm = measureLTEEVM(gnb,rxwaveform,txgrid)    
+
+    rxgrid = h5gOFDMDemodulate(gnb,rxwaveform);
+    pdschIndices = ltePDSCHIndices(gnb,gnb.PDSCH,gnb.PDSCH.PRBSet);
+    refSymbols = txgrid(pdschIndices);
+    hest = lteDLChannelEstimate(gnb,rxgrid);
+    eqgrid = lteEqualizeZF(rxgrid,hest);
+    pdschRxEq = lteExtractResources(pdschIndices,eqgrid*(10^(-gnb.PDSCH.Rho/20)));    
+    evm = lteEVM(pdschRxEq,refSymbols);    
+    
+end
+
+% Plot the spectrum P in the locations f. Display the legend specified in
+% input argument plotLegends and plot markers for the input bandwidth.
+% Multiple waveforms can be analyzed by passing f, P and waveformType as
+% cell arrays.
+function hNRWaveformsPlotBWOccupancy(f,P,plotLegends,NDLRBs,bandwidth)
+    
+    figure;
+    grid on;
+    hold on;
+    
+    title('Spectrum');
+    
+    % Plot the spectrum P and zoom at the edge of the allocated band
+    bandwidth = bandwidth*1e-6; % in MHz
+    hNRWaveformsPlotZoomedSpectrum(f*1e-6,P,bandwidth/2*0.6,bandwidth/2*1.4)
+    
+    h = legend(plotLegends,'Location','southwest');
+    h.AutoUpdate = 'off';
+
+    % Plot a marker at the edge of the allocated band
+    v = axis;
+    for b = [NDLRBs*12*15e3/2 bandwidth/2]
+        plot(repmat(b,1,2),v(3:4),'k:','LineWidth',1.4);
+    end
+    
+end
+
+% Plot the spectrum P in the locations f. Measure the out of band leaked
+% power between BW/2 and 1.5*(BW/2) and display it in the legend together
+% with the provided EVM value. The input argument waveformType contains a
+% character vector with the type of modulation used (CP-OFDM, W-OFDM or
+% F-OFDM). The bandwidth BW is calculated from the input parameter NDLRBs.
+% Multiple waveforms can be analyzed by passing f, P and waveformType as
+% cell arrays.
+function hNRWaveformsPlotSpectrumEVMLeakage(f,P,NDLRBs,waveformType,evm,figureTitle)
+
+    figure;
+    grid on;
+    hold on;
+    title(figureTitle);
+    
+    % Bandwith in MHz from NDLRB
+    bandwidth = hNRBToBandwidth(NDLRBs(strcmpi(waveformType,'CP-OFDM')));
+
+    % Out of band leakage measuring interval
+    outBand = [bandwidth/2 1.5*bandwidth/2];
+    
+    % Find f index for out of band leakage measuring interval
+    bwBandEdgeFreqIdx = find(f>=(outBand(1)),1,'first');
+    bwOutBandFreqIdx = find(f>=(outBand(2)),1,'first');    
+    
+    % Plot power spectrum
+    hNRWaveformsPlotZoomedSpectrum(f*1e-6,P,outBand(1)*0.6,outBand(1)*1.6)    
+    
+    % Measure power leakage in out of band measuring interval
+    p = 10*log10(sum(P(bwBandEdgeFreqIdx:bwOutBandFreqIdx,:),1));
+    plotLegends = {};
+    for n=1:length(waveformType)
+        legendLabel = waveformType{n};
+        powerLabel = ['P = ' num2str(p(n),'%0.1f') ' dBm'];
+        evmLabel = ['EVM = ' num2str(evm(n).RMS*100,'%0.2f') '%'];
+               
+        % Power and EVM plot labels
+        plotLegends = [plotLegends [legendLabel ', ' evmLabel ', ' powerLabel]]; %#ok<AGROW>
+    end
+    h = legend(plotLegends,'Location','southwest');
+    h.AutoUpdate = 'off';
+    % Out of band measuring interval markers
+    v = axis;
+    for b = outBand
+        plot(repmat(b,1,2),v(3:4),'k:','LineWidth',2);
+    end
+    % Occupied bandwidth markers
+    for b = NDLRBs*12*15e3/2
+        plot(repmat(b,1,2),v(3:4),'k:');
+    end
+    ha = annotation('doublearrow');
+    ha.Parent = gca;
+    ha.X = outBand;
+    ha.Y = (v(3)+(v(4)-v(3))*0.8)*[1 1];
+    outBandLabel = num2str((outBand(2)-outBand(1)),'%0.1f');
+    arrowLabel = ['Neighboring ' outBandLabel ' MHz channel'];
+    t = text(mean(outBand),(v(3)+(v(4)-v(3))*0.85),arrowLabel);
+    t.HorizontalAlignment = 'Center';
+    
+end
+
+% Plot the double sided spectrum P in the locations f. The inputs NDLRB and
+% subcarrierSpacing are used for the figure annotations.
+function hNRWaveformsPlotDoubleSidedSpectrum(f,P,NDLRB,subcarrierSpacing,figureTitle)
+
+    figure;
+    grid on;
+    hold on;
+    title(figureTitle);
+
+    % Plot power spectrum P and zoom on the edge of the allocated band
+    bw = NDLRB*12*subcarrierSpacing*1e3*1e-6;    
+    hNRWaveformsPlotZoomedSpectrum(f*1e-6,P,bw/2*(-1.25),bw/2*1.25)
+    
+    legend([num2str(NDLRB) ' RBs. Subcarrier spacing: ' num2str(subcarrierSpacing) ' kHz.'],'Location','best');
+    
+    % Plot an arrow specifying the used bandwidth
+    v = axis;    
+    ha = annotation('doublearrow');
+    ha.Parent = gca;
+    ha.X = [-1 1]*bw*0.5;
+    ha.Y = (v(4)-(v(4)-v(3))*0.9)*[1 1];
+    bwLabel = ['BW: ' num2str(bw,'%0.1f')];
+    arrowLabel = [num2str(bwLabel) ' MHz'];
+    t = text(0,(v(4)-(v(4)-v(3))*0.95),arrowLabel);
+    t.HorizontalAlignment = 'Center';
+   
+end
+
+% Plot the spectrum P in the locations f and zoom into the [xmin xmax]
+% range.
+function hNRWaveformsPlotZoomedSpectrum(f,P,xmin,xmax)
+
+    plot(f,10*log10(P));
+    v = axis;
+    axis([xmin xmax v(3) v(4)]);
+    xlabel('Frequency (MHz)')
+    ylabel('dBm');
+    
+end
+
+##### SOURCE END #####
+--></body></html>

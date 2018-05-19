@@ -1,0 +1,521 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>5G Polar Coding</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-01-26"><meta name="DC.source" content="NewRadio5GPolarCodingExample.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><style>
+.open_example { 
+    padding:0px 0px 1px 0px;
+    margin:20px;
+    font-size:0.9em;
+    border:1px solid #aeaeae;
+    display:block;
+    float:right;
+    border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px;
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #FFFFFF 0%, #E6E6E6 100%); /* FF3.6+ */	
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#E6E6E6)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #FFFFFF 0%,#E6E6E6 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ffffff 0%,#e6e6e6 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ffffff 0%,#e6e6e6 100%); /* IE10+ */
+    background: linear-gradient(top,  #ffffff 0%,#e6e6e6 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#E6E6E6',GradientType=0 ); /* IE6-9 */
+}
+
+.open_example:hover {
+    background: #f3f3f3; /* Old browsers */
+    background: -moz-linear-gradient(top, #f3f3f3 0%, #d7d7d7 100%); /* FF3.6+ */    
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3), color-stop(100%,#d7d7d7)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #f3f3f3 0%,#d7d7d7 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #f3f3f3 0%,#d7d7d7 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #f3f3f3 0%,#d7d7d7 100%); /* IE10+ */
+    background: linear-gradient(top,  #f3f3f3 0%,#d7d7d7 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#d7d7d7',GradientType=0 ); /* IE6-9 */
+} 
+
+.open_example a { 
+    padding:6px 10px; 
+    line-height:130%;
+    text-decoration:none;
+    float:left;
+}
+      </style><div class="open_example"><a href="matlab:edit NewRadio5GPolarCodingExample">Open this Example</a></div><div class="content"><h1>5G Polar Coding</h1><!--introduction--><p>This example highlights the new polar channel coding technique chosen for 5G communications system. Of the two main types of code constructions specified by 3GPP, this example models the CRC-Aided Polar (CA-Polar) coding scheme. This example describes the main components of the polar coding scheme with individual components for code construction, encoding and decoding along-with rate-matching. It models a polar-coded QPSK-modulated link over AWGN and presents Block-Error-Rate results for different message lengths and code rates for the coding scheme.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Introduction</a></li><li><a href="#3">Code Construction</a></li><li><a href="#5">Polar Encoding</a></li><li><a href="#6">Rate Matching and Rate Recovery</a></li><li><a href="#7">Polar Decoding</a></li><li><a href="#9">Frame Processing Loop</a></li><li><a href="#10">Results</a></li><li><a href="#11">Summary and Further Exploration</a></li><li><a href="#12">Appendix</a></li><li><a href="#13">Selected References</a></li></ul></div><h2 id="1">Introduction</h2><p>The selection of polar codes as the channel coding technique for control channels for 5G communications system has proven the merits of Arikan's [ <a href="#13">1</a> ] discovery and will establish their application in commercial systems [ <a href="#13">7</a> ]. Based on the concept of channel polarization, this new coding family is capacity achieving as opposed to just capacity approaching. With better or comparable performance than LDPC and turbo codes, it supersedes the tail-biting convolutional codes used in LTE systems for control channels. It is applied for downlink and uplink control information (DCI/UCI) for the enhanced mobile broadband (eMBB) use case, as well as the broadcast channel (BCH). Alternatively, the channel coding scheme for data channels for eMBB is specified to be flexible LDPC for all block sizes.</p><p>This example highlights the components to enable a polar coding downlink simulation using QPSK modulation over an AWGN channel. In the following sections, the individual polar coding components are further detailed.</p><pre class="codeinput">s = rng(311);       <span class="comment">% Seed the RNG for repeatability</span>
+</pre><p>Specify the code parameters used for a simulation.</p><pre class="codeinput"><span class="comment">% Code parameters</span>
+K = 54;             <span class="comment">% Message length in bits, including CRC, K &gt; 24 for DL</span>
+E = 124;            <span class="comment">% Rate matched output length, E &lt;= 8192</span>
+
+EbNo = 0.8;         <span class="comment">% EbNo in dB</span>
+L = 8;              <span class="comment">% List length, a power of two, [2 4 8]</span>
+numFrames = 10;     <span class="comment">% Number of frames to simulate</span>
+</pre><h2 id="3">Code Construction</h2><p>In general, polar code construction methods studied so far are SNR-dependent [ <a href="#13">6</a> ]. However, this example offers the 3GPP selected SNR-independent method where the reliability of each subchannel can be computed offline and the ordered sequence stored for a maximum code length [ <a href="#13">7</a> ]. The nested property of polar codes allows this sequence to be used for any code rate and all code lengths smaller than the maximum code length.</p><p>The function <a href="matlab:edit('h5gPolarConstruct.m')">h5gPolarConstruct</a> computes this sequence for a given rate-matched output length, <tt>E</tt> and based on the information length, <tt>K</tt>, creates the frozen bit vector, <tt>F</tt>, that has frozen bits for the least reliable subchannels. An entry of one in the vector indicates the specific bit to be frozen. The frozen bits are set to be zeros and are assumed known at both the encoder and decoder ends.</p><pre class="codeinput"><span class="comment">% Downlink channel parameters (K &gt; 24, including CRC bits)</span>
+crcLen = 24;      <span class="comment">% Number of CRC bits for DL, Section 5.1, [7]</span>
+nPC = 0;          <span class="comment">% Number of parity check bits, Section 5.3.1.2, [7]</span>
+nMax = 9;         <span class="comment">% Maximum value of n, for 2^n, Section 7.3.3, [7]</span>
+iIL = true;       <span class="comment">% Interleave input, Section 5.3.1.1, [7]</span>
+iBIL = false;     <span class="comment">% Interleave coded bits, Section 5.4.1.3, [7]</span>
+
+<span class="comment">% Code construction</span>
+F = h5gPolarConstruct(K,E,nMax);  <span class="comment">% 0 for information, 1 for frozen</span>
+N = length(F);                    <span class="comment">% Mother code block length</span>
+</pre><p>The construction process accounts for the cases of puncturing, shortening or repetition, based on the selected values of <tt>K</tt> and <tt>E</tt> and the resultant mother code block length, <tt>N</tt>.</p><p>The following schematic details the transmit-end processing for the downlink, with relevant components and their parameters highlighted.</p><p><img vspace="5" hspace="5" src="nr5gDLPolarCoding.png" alt=""> </p><pre class="codeinput">R = K/E;                          <span class="comment">% Effective code rate</span>
+bps = 2;                          <span class="comment">% bits per symbol, 1 for BPSK, 2 for QPSK</span>
+EsNo = EbNo + 10*log10(bps);
+snrdB = EsNo + 10*log10(R);       <span class="comment">% in dB</span>
+noiseVar = 1./(10.^(snrdB/10));
+</pre><h2 id="5">Polar Encoding</h2><p>Using the frozen bit vector, <tt>F</tt>, generated from the code construction process, create the <a href="matlab:edit('h5gPolarEncoder.m')">h5gPolarEncoder</a> System object&#8482; for polar encoding. This object implements the non-systematic encoding of the input <tt>K</tt> bits.</p><p>As specified by 3GPP, for the downlink, the input bits are interleaved prior to encoding. This is to distribute the CRC bits, which are appended at the end of the information bits. This interleaving is not specified for the uplink. The <tt>h5gPolarEncoder</tt> object implements the interleaving of the input bits as well.</p><pre class="codeinput"><span class="comment">% Polar Encoder</span>
+polarEnc = h5gPolarEncoder(N,K,F,<span class="string">'InterleaveInput'</span>,iIL);
+
+<span class="comment">% Modulator, Channel, Demodulator</span>
+qpskMod = comm.QPSKModulator(<span class="string">'BitInput'</span>, true);
+chan = comm.AWGNChannel(<span class="string">'NoiseMethod'</span>,<span class="string">'Variance'</span>,<span class="string">'Variance'</span>,noiseVar);
+qpskDemod = comm.QPSKDemodulator(<span class="string">'BitOutput'</span>,true,<span class="string">'DecisionMethod'</span>, <span class="keyword">...</span>
+    <span class="string">'Approximate log-likelihood ratio'</span>,<span class="string">'Variance'</span>,noiseVar);
+</pre><h2 id="6">Rate Matching and Rate Recovery</h2><p>The polar encoded set of bits (<tt>N</tt>) are rate-matched to output the specified number of bits (<tt>E</tt>) for resource element mapping [ <a href="#13">8</a> ]. The coded bits are sub-block interleaved and passed to a circular buffer of length <tt>N</tt>. Depending on the desired code rate and selected values of <tt>K</tt>, <tt>E</tt>, and <tt>N</tt>, either of repetition (<tt>E &gt;= N</tt>), and puncturing or shortening (<tt>E &lt; N</tt>) is realized by reading the output bits from the buffer.</p><div><ul><li>For puncturing, <tt>E</tt> bits are taken from the end</li><li>For shortening, <tt>E</tt> bits are taken from the start</li><li>For repetition, <tt>E</tt> bits are repeated modulo <tt>N</tt>.</li></ul></div><p>For the downlink, the selected bits are passed on to the modulation mapper, while for the uplink, they are further interleaved prior to mapping.</p><p>At the receiver end, rate recovery is accomplished for each of the cases</p><div><ul><li>For puncturing, corresponding LLRS for the bits removed are set to zero</li><li>For shortening, corresponding LLRS for the bits removed are set to a large value</li><li>For repetition, the set of LLRs corresponding to first <tt>N</tt> bits are selected.</li></ul></div><h2 id="7">Polar Decoding</h2><p>Three main polar decoding algorithms include Successive Cancellation (SC), Successive Cancellation List (SCL) decoding and CRC-Aided Successive Cancellation List Decoding (CA-SCL). This example supports the latter two decoding techniques due to their improved performance benefits in comparison to the first. It is well known that CA-SCL decoding can outperform turbo or LDPC codes and this was one of the major factors in the adoption of polar codes by 3GPP.</p><p>Tal &amp; Vardy [ <a href="#13">2</a> ] describe the SCL decoding algorithm in terms of likelihoods (probabilities). However, due to underflow, the inherent computations are numerically unstable. To overcome this issue, Stimming et.al. [ <a href="#13">5</a> ] offer the SCL decoding solely in the log-likelihood ratio (LLR) domain. This is implemented by the System object <a href="matlab:edit('h5gPolarDecoder.m')">h5gPolarDecoder</a>.  The list decoding is characterized by the <tt>L</tt> parameter, which represents the number of most likely decoding paths retained. At the end of the decoding, the most likely code-path among the <tt>L</tt> paths is the decoder output. As <tt>L</tt> is increased, the decoder performance also improves, however, with a diminishing-returns effect.</p><p>A non-zero value for the <tt>CRCLength</tt> property enables CRC-aided SCL decoding [ <a href="#13">3</a> ]. For an input message which is concatenated with a CRC, CA-SCL decoding prunes out any of the paths for which the CRC is invalid, if at least one path has the correct CRC. This additional insight in the final path selection improves the performance further, when compared to SCL decoding. For the downlink, a CRC of 24 bits is used, while for the uplink CRCs of 6 and 11 bits are specified, which vary on the value of <tt>K</tt>.</p><p>The decoder also accounts for the input bit interleaving specified at the transmitter for the downlink, prior to outputting the decoded bits.</p><pre class="codeinput"><span class="comment">% Polar Decoder</span>
+polarDec = h5gPolarDecoder(N,K,F,L,crcLen,<span class="string">'DeinterleaveOutput'</span>,iIL);
+
+<span class="comment">% Bit-Error rate meter</span>
+ber = comm.ErrorRate;
+</pre><p>The following schematic highlights the coding components with their relevant parameters, in a simulation link.</p><p><img vspace="5" hspace="5" src="nr5gPolar.png" alt=""> </p><h2 id="9">Frame Processing Loop</h2><p>This section shows how the prior initialized components for polar coding are used in a Block Error Rate (BLER) simulation. For each frame processed, the following steps are performed:</p><div><ul><li><tt>K-crcLen</tt> random bits are generated,</li><li>A CRC is computed and appended to these bits</li><li>The CRC appended bits are polar encoded to the mother code block length</li><li>Rate-matching is performed to transmit <tt>E</tt> bits</li><li>The <tt>E</tt> bits are QPSK modulated</li><li>White Gaussian Noise of specified power is added</li><li>The noisy signal is soft QPSK demodulated to output LLR values</li><li>Rate recovery is performed accounting for either of puncturing, shortening or repetition</li><li>The recovered LLR values are polar decoded using the CA-SCL algorithm, including deinterleaving.</li><li>Off the decoded <tt>K</tt> bits, the first <tt>K-crcLen</tt> bits are compared with those transmitted to update the BLER and bit-error-rate (BER) metrics.</li></ul></div><p>At the end of the simulation, the two performance indicators, BLER and BER, are reported.</p><pre class="codeinput">numferr = 0;
+<span class="keyword">for</span> i = 1:numFrames
+
+    <span class="comment">% Generate a random message</span>
+    msg = randi([0 1],K-crcLen,1);
+
+    <span class="comment">% CRC attachment</span>
+    msgcrc = h5gCRCEncode(msg,<span class="string">'24C'</span>);
+
+    <span class="comment">% Polar encode</span>
+    encOut = polarEnc(msgcrc);
+
+    <span class="comment">% Rate match</span>
+    modIn = h5gRateMatchPolar(encOut,K,E,iBIL);
+
+    <span class="comment">% Modulate</span>
+    modOut = qpskMod(modIn);
+
+    <span class="comment">% Add white Gaussian noise</span>
+    rSig = chan(modOut);
+
+    <span class="comment">% Soft demodulate</span>
+    rxLLR = qpskDemod(rSig);
+
+    <span class="comment">% Rate recover</span>
+    decIn = h5gRateRecoverPolar(rxLLR,K,N,iBIL);
+
+    <span class="comment">% Polar decode</span>
+    decBits = polarDec(decIn);
+
+    <span class="comment">% Compare msg and decoded bits</span>
+    errStats = ber(decBits(1:K-crcLen), msg);
+    numferr = numferr + any(decBits(1:K-crcLen)~=msg);
+
+<span class="keyword">end</span>
+
+disp([<span class="string">'Block Error Rate: '</span> num2str(numferr/numFrames) <span class="keyword">...</span>
+      <span class="string">', Bit Error Rate: '</span> num2str(errStats(1)) <span class="keyword">...</span>
+      <span class="string">', at SNR = '</span> num2str(snrdB) <span class="string">' dB'</span>])
+
+rng(s);     <span class="comment">% Restore RNG</span>
+</pre><pre class="codeoutput">Block Error Rate: 0.1, Bit Error Rate: 0.026667, at SNR = 0.20002 dB
+</pre><h2 id="10">Results</h2><p>To get meaningful results, simulations have to be run for a longer duration. Using the attached script <a href="matlab:edit('hPolarBLERSimDriver.m')">hPolarBLERSimDriver</a>, which encapsulates the above processing into a function that supports C-code generation, the following results for different code rates and message lengths are presented.</p><p><img vspace="5" hspace="5" src="nr5gPolarL8DL.png" alt=""> </p><p>The above results were generated by simulating, for each SNR point, up to 1000 frame errors or a maximum of 100e3 frames, whichever occurred first.</p><p>These BLER performance results indicate the suitability of polar codes in a communication link and their implicit support for rate-compatibility at the bit-level granularity.</p><p>The use of C-code generation tools for the components reduces the execution time, a key concern for simulations. The C-code generation is enabled by MATLAB Coder&#8482;.</p><h2 id="11">Summary and Further Exploration</h2><p>This example highlights one of the polar coding schemes (CRC-Aided Polar) specified by 3GPP for New Radio control channels (DCI, UCI) and broadcast channel (BCH). It offers components for all stages of the processing (code construction, encoding, rate-matching and decoding) and uses them in a link with QPSK over an AWGN channel. Highlighted performance results for different code rates and message lengths show agreement to published trends, within parametric and simulation assumption variations.</p><p>Explore simple parameter variations (<tt>K</tt>, <tt>E</tt>, <tt>L</tt>) and their effect on BLER performance. The polar coding components are implemented as open MATLAB&reg; code to enable their application for both downlink/uplink control and broadcast channels. The CA-Polar scheme is applicable for both</p><div><ul><li>Downlink, for all message lengths, and</li><li>Uplink, for <tt>K &gt; 30</tt>, with <tt>crcLen = 11</tt>, <tt>nPC = 0</tt>, <tt>nMax = 10</tt>, <tt>iIL = false</tt>, and <tt>iBIL = true</tt>.</li></ul></div><p>Future work would include application of the technique to PDCCH, PUCCH and PBCH channels as well as supporting parity-check polar coding (PC-Polar) for the uplink for smaller message lengths (<tt>18&lt;=K&lt;=25</tt>).</p><h2 id="12">Appendix</h2><p>The example uses the following system objects and function utilities:</p><div><ul><li><a href="matlab:edit('h5gPolarBitReverse.m')">h5gPolarBitReverse.m</a></li><li><a href="matlab:edit('h5gPolarConstruct.m')">h5gPolarConstruct.m</a></li><li><a href="matlab:edit('h5gPolarDecoder.m')">h5gPolarDecoder.m</a></li><li><a href="matlab:edit('h5gPolarEncoder.m')">h5gPolarEncoder.m</a></li><li><a href="matlab:edit('h5gRateMatchPolar.m')">h5gRateMatchPolar.m</a></li><li><a href="matlab:edit('h5gRateRecoverPolar.m')">h5gRateRecoverPolar.m</a></li></ul></div><h2 id="13">Selected References</h2><div><ol><li>Arikan, E., "Channel Polarization: A Method for constructing Capacity-Achieving Codes for Symmetric Binary-Input Memoryless Channels," IEEE Transactions on Information Theory, vol. 55, No. 7, pp. 3051-3073, July 2009.</li><li>Tal, I, and Vardy, A., "List decoding of Polar Codes", IEEE Transactions on Information Theory, vol. 61, No. 5, pp. 2213-2226, May 2015.</li><li>Niu, K., and Chen, K., "CRC-Aided Decoding of Polar Codes," IEEE Communications Letters, vol. 16, No. 10, pp. 1668-1671, Oct. 2012.</li><li>Niu, K., Chen, K., and Lin, J.R., "Beyond turbo codes: rate compatible punctured polar codes", IEEE International Conference on Communications, pp. 3423-3427, 2013.</li><li>Stimming, A. B., Parizi, M. B., and Burg, A., "LLR-Based Successive Cancellation List Decoding of Polar Codes", IEEE Transaction on Signal Processing, vol. 63, No. 19, pp.5165-5179, 2015.</li><li>Vangala, H., Viterbo, E., and Hong, Y., "A Comparative study of Polar Code Constructions for the AWGN Channel", online.</li><li>3GPP TS 38.212, "3rd Generation Partnership Project; Technical Specification Group Radio Access Network; NR; Multiplexing and channel coding (Release 15), v15.0.0, 2017-12.</li><li>R1-1711729. "WF on circular buffer of Polar Code", 3GPP TSG RAN WG1 meeting NR Ad-Hoc#2, Ericsson, Qualcomm, MediaTek, LGE. June 2017.</li></ol></div><p class="footer">Copyright 2017-2018 The MathWorks, Inc.<br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br><br>
+		  MATLAB and Simulink are registered trademarks of The MathWorks, Inc.  Please see <a href="http://www.mathworks.com/trademarks">www.mathworks.com/trademarks</a> for a list of other trademarks owned by The MathWorks, Inc.  Other product or brand names are trademarks or registered trademarks of their respective owners.
+      </p></div><!--
+##### SOURCE BEGIN #####
+%% 5G Polar Coding
+%
+% This example highlights the new polar channel coding technique chosen for
+% 5G communications system. Of the two main types of code constructions
+% specified by 3GPP, this example models the CRC-Aided Polar (CA-Polar)
+% coding scheme. This example describes the main components of the polar
+% coding scheme with individual components for code construction, encoding
+% and decoding along-with rate-matching. It models a polar-coded
+% QPSK-modulated link over AWGN and presents Block-Error-Rate results for
+% different message lengths and code rates for the coding scheme.
+
+% Copyright 2017-2018 The MathWorks, Inc.
+
+%% Introduction
+%
+% The selection of polar codes as the channel coding technique for control
+% channels for 5G communications system has proven the merits of Arikan's [
+% <#13 1> ] discovery and will establish their application in commercial
+% systems [ <#13 7> ]. Based on the concept of channel polarization, this
+% new coding family is capacity achieving as opposed to just capacity
+% approaching. With better or comparable performance than LDPC and turbo
+% codes, it supersedes the tail-biting convolutional codes used in LTE
+% systems for control channels. It is applied for downlink and uplink
+% control information (DCI/UCI) for the enhanced mobile broadband (eMBB)
+% use case, as well as the broadcast channel (BCH). Alternatively, the
+% channel coding scheme for data channels for eMBB is specified to be
+% flexible LDPC for all block sizes.
+%
+% This example highlights the components to enable a polar coding downlink
+% simulation using QPSK modulation over an AWGN channel. In the following
+% sections, the individual polar coding components are further detailed.
+
+s = rng(311);       % Seed the RNG for repeatability
+
+%%
+% Specify the code parameters used for a simulation. 
+
+% Code parameters
+K = 54;             % Message length in bits, including CRC, K > 24 for DL
+E = 124;            % Rate matched output length, E <= 8192
+
+EbNo = 0.8;         % EbNo in dB
+L = 8;              % List length, a power of two, [2 4 8]
+numFrames = 10;     % Number of frames to simulate
+
+%% Code Construction
+%
+% In general, polar code construction methods studied so far are
+% SNR-dependent [ <#13 6> ]. However, this example offers the 3GPP selected
+% SNR-independent method where the reliability of each subchannel can be
+% computed offline and the ordered sequence stored for a maximum code
+% length [ <#13 7> ]. The nested property of polar codes allows this
+% sequence to be used for any code rate and all code lengths smaller than
+% the maximum code length.
+%
+% The function <matlab:edit('h5gPolarConstruct.m') h5gPolarConstruct>
+% computes this sequence for a given rate-matched output length, |E| and
+% based on the information length, |K|, creates the frozen bit vector, |F|,
+% that has frozen bits for the least reliable subchannels. An entry of one
+% in the vector indicates the specific bit to be frozen. The frozen bits
+% are set to be zeros and are assumed known at both the encoder and decoder
+% ends.
+
+% Downlink channel parameters (K > 24, including CRC bits)
+crcLen = 24;      % Number of CRC bits for DL, Section 5.1, [7]
+nPC = 0;          % Number of parity check bits, Section 5.3.1.2, [7]
+nMax = 9;         % Maximum value of n, for 2^n, Section 7.3.3, [7]
+iIL = true;       % Interleave input, Section 5.3.1.1, [7]
+iBIL = false;     % Interleave coded bits, Section 5.4.1.3, [7]
+
+% Code construction
+F = h5gPolarConstruct(K,E,nMax);  % 0 for information, 1 for frozen
+N = length(F);                    % Mother code block length
+
+%% 
+% The construction process accounts for the cases of puncturing, shortening
+% or repetition, based on the selected values of |K| and |E| and the
+% resultant mother code block length, |N|.
+%
+% The following schematic details the transmit-end processing for the
+% downlink, with relevant components and their parameters highlighted.
+%
+% <<nr5gDLPolarCoding.png>>
+%
+
+R = K/E;                          % Effective code rate
+bps = 2;                          % bits per symbol, 1 for BPSK, 2 for QPSK
+EsNo = EbNo + 10*log10(bps);       
+snrdB = EsNo + 10*log10(R);       % in dB
+noiseVar = 1./(10.^(snrdB/10)); 
+
+%% Polar Encoding
+%
+% Using the frozen bit vector, |F|, generated from the code construction
+% process, create the <matlab:edit('h5gPolarEncoder.m') h5gPolarEncoder>
+% System object(TM) for polar encoding. This object implements the
+% non-systematic encoding of the input |K| bits.
+%
+% As specified by 3GPP, for the downlink, the input bits are interleaved
+% prior to encoding. This is to distribute the CRC bits, which are appended
+% at the end of the information bits. This interleaving is not specified
+% for the uplink. The |h5gPolarEncoder| object implements the interleaving
+% of the input bits as well.
+
+% Polar Encoder
+polarEnc = h5gPolarEncoder(N,K,F,'InterleaveInput',iIL);
+
+% Modulator, Channel, Demodulator
+qpskMod = comm.QPSKModulator('BitInput', true);
+chan = comm.AWGNChannel('NoiseMethod','Variance','Variance',noiseVar);
+qpskDemod = comm.QPSKDemodulator('BitOutput',true,'DecisionMethod', ...
+    'Approximate log-likelihood ratio','Variance',noiseVar);
+
+%% Rate Matching and Rate Recovery
+%
+% The polar encoded set of bits (|N|) are rate-matched to output the
+% specified number of bits (|E|) for resource element mapping [ <#13 8> ].
+% The coded bits are sub-block interleaved and passed to a circular buffer
+% of length |N|. Depending on the desired code rate and selected values of
+% |K|, |E|, and |N|, either of repetition (|E >= N|), and puncturing or
+% shortening (|E < N|) is realized by reading the output bits from the
+% buffer.
+%
+% * For puncturing, |E| bits are taken from the end
+% * For shortening, |E| bits are taken from the start
+% * For repetition, |E| bits are repeated modulo |N|.
+%
+% For the downlink, the selected bits are passed on to the modulation
+% mapper, while for the uplink, they are further interleaved prior to
+% mapping.
+%
+% At the receiver end, rate recovery is accomplished for each of the cases 
+% 
+% * For puncturing, corresponding LLRS for the bits removed are set to zero
+% * For shortening, corresponding LLRS for the bits removed are set to a
+% large value
+% * For repetition, the set of LLRs corresponding to first |N| bits are
+% selected.
+
+%% Polar Decoding
+%
+% Three main polar decoding algorithms include Successive Cancellation
+% (SC), Successive Cancellation List (SCL) decoding and CRC-Aided
+% Successive Cancellation List Decoding (CA-SCL). This example supports the
+% latter two decoding techniques due to their improved performance benefits
+% in comparison to the first. It is well known that CA-SCL decoding can
+% outperform turbo or LDPC codes and this was one of the major factors in
+% the adoption of polar codes by 3GPP.
+%
+% Tal & Vardy [ <#13 2> ] describe the SCL decoding algorithm in terms of
+% likelihoods (probabilities). However, due to underflow, the inherent
+% computations are numerically unstable. To overcome this issue, Stimming
+% et.al. [ <#13 5> ] offer the SCL decoding solely in the log-likelihood
+% ratio (LLR) domain. This is implemented by the System object
+% <matlab:edit('h5gPolarDecoder.m') h5gPolarDecoder>.  The list decoding is
+% characterized by the |L| parameter, which represents the number of most
+% likely decoding paths retained. At the end of the decoding, the most
+% likely code-path among the |L| paths is the decoder output. As |L| is
+% increased, the decoder performance also improves, however, with a
+% diminishing-returns effect.
+%
+% A non-zero value for the |CRCLength| property enables CRC-aided SCL
+% decoding [ <#13 3> ]. For an input message which is concatenated with a
+% CRC, CA-SCL decoding prunes out any of the paths for which the CRC is
+% invalid, if at least one path has the correct CRC. This additional
+% insight in the final path selection improves the performance further,
+% when compared to SCL decoding. For the downlink, a CRC of 24 bits is
+% used, while for the uplink CRCs of 6 and 11 bits are specified, which
+% vary on the value of |K|.
+%
+% The decoder also accounts for the input bit interleaving specified at the
+% transmitter for the downlink, prior to outputting the decoded bits.
+
+% Polar Decoder
+polarDec = h5gPolarDecoder(N,K,F,L,crcLen,'DeinterleaveOutput',iIL); 
+
+% Bit-Error rate meter
+ber = comm.ErrorRate;
+
+%%
+% The following schematic highlights the coding components with their
+% relevant parameters, in a simulation link.
+%
+% <<nr5gPolar.png>>
+%
+
+%% Frame Processing Loop
+%
+% This section shows how the prior initialized components for polar coding
+% are used in a Block Error Rate (BLER) simulation. For each frame
+% processed, the following steps are performed:
+%
+% * |K-crcLen| random bits are generated,
+% * A CRC is computed and appended to these bits
+% * The CRC appended bits are polar encoded to the mother code block length
+% * Rate-matching is performed to transmit |E| bits
+% * The |E| bits are QPSK modulated
+% * White Gaussian Noise of specified power is added
+% * The noisy signal is soft QPSK demodulated to output LLR values
+% * Rate recovery is performed accounting for either of puncturing,
+% shortening or repetition
+% * The recovered LLR values are polar decoded using the CA-SCL algorithm,
+% including deinterleaving.
+% * Off the decoded |K| bits, the first |K-crcLen| bits are compared with
+% those transmitted to update the BLER and bit-error-rate (BER) metrics.
+%
+% At the end of the simulation, the two performance indicators, BLER and
+% BER, are reported.
+
+numferr = 0;
+for i = 1:numFrames
+
+    % Generate a random message
+    msg = randi([0 1],K-crcLen,1);
+    
+    % CRC attachment
+    msgcrc = h5gCRCEncode(msg,'24C');
+    
+    % Polar encode
+    encOut = polarEnc(msgcrc);
+    
+    % Rate match
+    modIn = h5gRateMatchPolar(encOut,K,E,iBIL);
+    
+    % Modulate
+    modOut = qpskMod(modIn);
+    
+    % Add white Gaussian noise
+    rSig = chan(modOut);
+    
+    % Soft demodulate
+    rxLLR = qpskDemod(rSig);
+    
+    % Rate recover
+    decIn = h5gRateRecoverPolar(rxLLR,K,N,iBIL);
+    
+    % Polar decode
+    decBits = polarDec(decIn);
+    
+    % Compare msg and decoded bits
+    errStats = ber(decBits(1:K-crcLen), msg);
+    numferr = numferr + any(decBits(1:K-crcLen)~=msg);
+
+end
+
+disp(['Block Error Rate: ' num2str(numferr/numFrames) ...
+      ', Bit Error Rate: ' num2str(errStats(1)) ...
+      ', at SNR = ' num2str(snrdB) ' dB'])
+
+rng(s);     % Restore RNG
+
+%% Results
+%
+% To get meaningful results, simulations have to be run for a longer
+% duration. Using the attached script <matlab:edit('hPolarBLERSimDriver.m')
+% hPolarBLERSimDriver>, which encapsulates the above processing into a
+% function that supports C-code generation, the following results for
+% different code rates and message lengths are presented.
+%
+% <<nr5gPolarL8DL.png>>
+%
+% The above results were generated by simulating, for each SNR point, up to
+% 1000 frame errors or a maximum of 100e3 frames, whichever occurred first.
+%
+% These BLER performance results indicate the suitability of polar codes in
+% a communication link and their implicit support for rate-compatibility at
+% the bit-level granularity.
+%
+% The use of C-code generation tools for the components reduces the
+% execution time, a key concern for simulations. The C-code generation is
+% enabled by MATLAB Coder(TM).
+
+%% Summary and Further Exploration
+%
+% This example highlights one of the polar coding schemes (CRC-Aided Polar)
+% specified by 3GPP for New Radio control channels (DCI, UCI) and broadcast
+% channel (BCH). It offers components for all stages of the processing
+% (code construction, encoding, rate-matching and decoding) and uses them
+% in a link with QPSK over an AWGN channel. Highlighted performance results
+% for different code rates and message lengths show agreement to published
+% trends, within parametric and simulation assumption variations.
+%
+% Explore simple parameter variations (|K|, |E|, |L|) and their effect on
+% BLER performance. The polar coding components are implemented as open
+% MATLAB(R) code to enable their application for both downlink/uplink
+% control and broadcast channels. The CA-Polar scheme is applicable for
+% both
+%
+% * Downlink, for all message lengths, and
+% * Uplink, for |K > 30|, with |crcLen = 11|, |nPC = 0|, |nMax = 10|, |iIL
+% = false|, and |iBIL = true|.
+%
+% Future work would include application of the technique to PDCCH, PUCCH
+% and PBCH channels as well as supporting parity-check polar coding
+% (PC-Polar) for the uplink for smaller message lengths (|18<=K<=25|).
+
+%% Appendix
+%
+% The example uses the following system objects and function utilities:
+%
+% * <matlab:edit('h5gPolarBitReverse.m') h5gPolarBitReverse.m>
+% * <matlab:edit('h5gPolarConstruct.m') h5gPolarConstruct.m>
+% * <matlab:edit('h5gPolarDecoder.m') h5gPolarDecoder.m>
+% * <matlab:edit('h5gPolarEncoder.m') h5gPolarEncoder.m>
+% * <matlab:edit('h5gRateMatchPolar.m') h5gRateMatchPolar.m>
+% * <matlab:edit('h5gRateRecoverPolar.m') h5gRateRecoverPolar.m>
+
+%% Selected References
+% # Arikan, E., "Channel Polarization: A Method for constructing
+% Capacity-Achieving Codes for Symmetric Binary-Input Memoryless Channels,"
+% IEEE Transactions on Information Theory, vol. 55, No. 7, pp. 3051-3073,
+% July 2009.
+% # Tal, I, and Vardy, A., "List decoding of Polar Codes", IEEE
+% Transactions on Information Theory, vol. 61, No. 5, pp. 2213-2226, May
+% 2015.
+% # Niu, K., and Chen, K., "CRC-Aided Decoding of Polar Codes," IEEE
+% Communications Letters, vol. 16, No. 10, pp. 1668-1671, Oct. 2012.
+% # Niu, K., Chen, K., and Lin, J.R., "Beyond turbo codes: rate compatible
+% punctured polar codes", IEEE International Conference on Communications,
+% pp. 3423-3427, 2013.
+% # Stimming, A. B., Parizi, M. B., and Burg, A., "LLR-Based Successive
+% Cancellation List Decoding of Polar Codes", IEEE Transaction on Signal
+% Processing, vol. 63, No. 19, pp.5165-5179, 2015.
+% # Vangala, H., Viterbo, E., and Hong, Y., "A Comparative study of Polar
+% Code Constructions for the AWGN Channel", online.
+% # 3GPP TS 38.212, "3rd Generation Partnership Project; Technical
+% Specification Group Radio Access Network; NR; Multiplexing and channel
+% coding (Release 15), v15.0.0, 2017-12.
+% # R1-1711729. "WF on circular buffer of Polar Code", 3GPP TSG RAN WG1
+% meeting NR Ad-Hoc#2, Ericsson, Qualcomm, MediaTek, LGE. June 2017.
+
+displayEndOfDemoMessage(mfilename)
+
+##### SOURCE END #####
+--></body></html>
