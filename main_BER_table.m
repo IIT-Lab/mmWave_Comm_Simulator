@@ -1,8 +1,6 @@
 % The purpose of this script is to simulate 802.11ad performance of MCS 1 - 12
 
 diary('SNR_TEMP.log');
-clear all; close all;
-
 lengthPSDU = 1000;
 
 nTx_row = 1;

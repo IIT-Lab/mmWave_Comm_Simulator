@@ -4,7 +4,7 @@
 %   % The output of this script returns the statistical PER, in percent
 %   mcsTable.MCSPERTable(snr==mcsTable.snrRange,mcs==mcsTable.mcsRange)
 
-T = readtable('PER_TABLES\CDL_ALL_1_First.txt');
+T = readtable('./PER_TABLES/CDL_ALL_1_First.txt');
 profile = 'CDL-A';
 
 mcsTable.snrRange = unique(T.Var3);
