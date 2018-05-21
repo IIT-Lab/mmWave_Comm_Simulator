@@ -1,5 +1,6 @@
 % The purpose of this script is to simulate 802.11ad performance of MCS 1 - 12
 
+addpath('/Plugins/lte5g');
 diary('SNR_TEMP.log');
 lengthPSDU = 1000;
 
