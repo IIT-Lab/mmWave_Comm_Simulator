@@ -44,7 +44,7 @@ classdef s_phased_channel_handle_version < matlab.System
     
     methods(Access = private)
         function [pl_db, attenuated_waveforms] = apply_pathloss(obj, distance_3d, txWaveforms)
-            pl_los = 32.4 + 17.3 * log10(distance_3d) + 20 * log10(obj.center_frequency);
+            pl_los = 32.4 + 17.3 * log10(distance_3d) + 20 * log10(obj.center_frequency) + lognrnd(0, 3);
             if obj.isLoS
                 pl_db = pl_los;
             else %NLoS
