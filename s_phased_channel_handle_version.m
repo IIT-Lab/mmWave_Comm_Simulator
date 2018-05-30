@@ -48,7 +48,7 @@ classdef s_phased_channel_handle_version < matlab.System
             if obj.isLoS
                 pl_db = pl_los;
             else %NLoS
-                pl_nlos = 38.3 * log10(distance_3d) + 17.3 + 24.9 * log10(obj.center_frequency);
+                pl_nlos = 38.3 * log10(distance_3d) + 17.3 + 24.9 * log10(obj.center_frequency) + lognrnd(0, 8.03);
                 pl_db = max(pl_los, pl_nlos);
             end
             
