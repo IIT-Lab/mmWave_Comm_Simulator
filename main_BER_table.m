@@ -1,8 +1,8 @@
 % The purpose of this script is to simulate 802.11ad performance of MCS 1 - 12
 
 addpath('./Plugins/lte5g');
-diary('SNR_TEMP.log');
-lengthPSDU = 1000;
+diary('DELAY_SPREAD.log');
+lengthPSDU = 1024;
 
 nTx_row = 1;
 nTx_col = 1;
@@ -10,8 +10,8 @@ nRx = 1;
 
 tic
 for profile = {'CDL-A', 'CDL-B', 'CDL-C', 'CDL-D', 'CDL-E'}
-    for SNR = 1 : 1
-        for MCS = 1 : 1
+    for SNR = 0 : 20
+        for MCS = 1 : 12
             tx_phy = s_phy_tx( ...
                 'MCS', MCS, ...
                 'PSDULength', lengthPSDU);
@@ -25,7 +25,7 @@ for profile = {'CDL-A', 'CDL-B', 'CDL-C', 'CDL-D', 'CDL-E'}
                 'profile',                  cell2mat(profile));
             rx_phy = s_phy_rx();
             
-            totPkt = 2;
+            totPkt = 1000;
             numError = 0;
             
             for i = 1 : totPkt
