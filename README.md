@@ -26,7 +26,7 @@
         * Implemented, see *apply_pathloss* function inside *s_phased_channel*
 
     * Large-scale shadowing?
-        * Pending to discuss.
+        * Implemented, see [here](https://github.com/zhengnanlee/mmWave_Daily_Dev/commit/c04eea7e028c8c5e53074ed838977db513a49f14)
 
     * LoS probability?
-        * Refer to blockage, section 7.6.4 of TR38.901.
+        * Implemented, see [here](https://github.com/zhengnanlee/mmWave_Daily_Dev/commit/d67b4a7cf69fce4aefd37bc93ebbc8b3346e3257)
