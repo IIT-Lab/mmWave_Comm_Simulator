@@ -4,8 +4,8 @@
 %   % The output of this script returns the statistical PER, in percent
 %   mcsTable.MCSPERTable(snr==mcsTable.snrRange,mcs==mcsTable.mcsRange)
 
-T = readtable('./PER_TABLES/CDL_ALL_1_MOBILITY.txt');
-profile = 'CDL-A';
+T = readtable('./PER_TABLES/CDL_ALL_DelaySpread16ns.txt');
+profile = 'CDL-B';
 
 mcsTable.snrRange = unique(T.Var3);
 mcsTable.mcsRange = unique(T.Var2);
