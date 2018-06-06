@@ -17,12 +17,12 @@ classdef s_phased_tx < matlab.System
         %% Array definition
         antenna_array;
     end
-
+    
     properties(Access = private)
         steeringvec;
         transmitter;
         radiator;
-%         array_response;
+        %         array_response;
     end
     
     methods
@@ -38,13 +38,13 @@ classdef s_phased_tx < matlab.System
             light_speed = physconst('light');
             wavelength = light_speed / obj.center_frequency;
             
-            % Antenna definition, URA
-            %             obj.antenna_array = phased.ULA( ...
-            %                 obj.numTxElements, ...
-            %                 'ElementSpacing',           0.5 * wavelength, ...
-            %                 'Element',                  phased.IsotropicAntennaElement('BackBaffled', true));
-            
-            % Antenna definition, URA
+%             Antenna definition, ULA
+%             obj.antenna_array = phased.ULA( ...
+%                 obj.numTxElements, ...
+%                 'ElementSpacing',           0.5 * wavelength, ...
+%                 'Element',                  phased.IsotropicAntennaElement('BackBaffled', true));
+%             
+%             Antenna definition, URA
 %             obj.antenna_array = phased.URA( ...
 %                 'Size',                     [obj.numTxElements_row, obj.numTxElements_col], ...
 %                 'ElementSpacing',           0.5 * wavelength, ...
@@ -68,10 +68,10 @@ classdef s_phased_tx < matlab.System
                 'OperatingFrequency',       obj.center_frequency,...
                 'CombineRadiatedSignals',   false);
             
-%             % Antenna response with weights input
-%             obj.array_response = phased.ArrayResponse( ...
-%                 'SensorArray',              obj.antenna_array, ...
-%                 'WeightsInputPort',         true);
+            %             % Antenna response with weights input
+            %             obj.array_response = phased.ArrayResponse( ...
+            %                 'SensorArray',              obj.antenna_array, ...
+            %                 'WeightsInputPort',         true);
         end
         
         function [txWaveforms] = stepImpl(obj, txBits, toRxAngle, W)
@@ -100,20 +100,18 @@ classdef s_phased_tx < matlab.System
                 % wR = obj.steeringvec(obj.center_frequency, -toRxAngle);
                 % weight = wT_hybrid .* wR;
                 
-                
                 % then radiate it -- since we uses weights to "mimic" the
                 % boresight, we do not need to steer them physically
                 W = wT_hybrid;
             end
             
+            %% Amplify those signals through transmitter
+            txWaveforms = obj.transmitter(txBits);
             
             %% Radiate signals out of weights
-            txWaveforms = obj.radiator(txBits, ...
+            txWaveforms = obj.radiator(txWaveforms, ...
                 repmat([0; 0], 1, obj.numTxElements_row * obj.numTxElements_col), conj(W));
             
-            %% Amplify those signals through transmitter
-            txWaveforms = obj.transmitter(txWaveforms);
-
             %% Visualizations
             if obj.visualization
                 scanAz = -180 : 180;
