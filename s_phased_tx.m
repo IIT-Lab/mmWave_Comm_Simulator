@@ -13,10 +13,12 @@ classdef s_phased_tx < matlab.System
         
         %% Vis
         visualization = false;
+        
+        %% Array definition
+        antenna_array;
     end
 
     properties(Access = private)
-        antenna_array;
         steeringvec;
         transmitter;
         radiator;
@@ -43,10 +45,10 @@ classdef s_phased_tx < matlab.System
             %                 'Element',                  phased.IsotropicAntennaElement('BackBaffled', true));
             
             % Antenna definition, URA
-            obj.antenna_array = phased.URA( ...
-                'Size',                     [obj.numTxElements_row, obj.numTxElements_col], ...
-                'ElementSpacing',           0.5 * wavelength, ...
-                'Element',                  phased.IsotropicAntennaElement('BackBaffled', true));
+%             obj.antenna_array = phased.URA( ...
+%                 'Size',                     [obj.numTxElements_row, obj.numTxElements_col], ...
+%                 'ElementSpacing',           0.5 * wavelength, ...
+%                 'Element',                  phased.IsotropicAntennaElement('BackBaffled', true));
             
             % Steering vector according to antenna array
             obj.steeringvec = phased.SteeringVector( ...
@@ -108,9 +110,6 @@ classdef s_phased_tx < matlab.System
             %% Radiate signals out of weights
             txWaveforms = obj.radiator(txBits, ...
                 repmat([0; 0], 1, obj.numTxElements_row * obj.numTxElements_col), conj(W));
-            
-%             %% Generate responses
-%             respAtAngle = obj.array_response(obj.center_frequency, toRxAngle, W);
             
             %% Amplify those signals through transmitter
             txWaveforms = obj.transmitter(txWaveforms);
