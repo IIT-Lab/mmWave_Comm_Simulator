@@ -36,7 +36,6 @@ classdef s_phased_tx < matlab.System
         function setupImpl(obj)
             % Physical constants
             light_speed = physconst('light');
-            wavelength = light_speed / obj.center_frequency;
             
 %             Antenna definition, ULA
 %             obj.antenna_array = phased.ULA( ...

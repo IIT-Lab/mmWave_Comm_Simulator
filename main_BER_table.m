@@ -25,7 +25,7 @@ for profile = {'CDL-A', 'CDL-B', 'CDL-C', 'CDL-D', 'CDL-E'}
                 'profile',                  cell2mat(profile));
             rx_phy = s_phy_rx();
             
-            totPkt = 1000;
+            totPkt = 1;
             numError = 0;
             
             for i = 1 : totPkt
