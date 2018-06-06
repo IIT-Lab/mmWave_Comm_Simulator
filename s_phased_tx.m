@@ -104,16 +104,17 @@ classdef s_phased_tx < matlab.System
                 W = wT_hybrid;
             end
             
-            %% Amplify those signals through transmitter
-            txWaveforms = obj.transmitter(txBits);
             
             %% Radiate signals out of weights
-            txWaveforms = obj.radiator(txWaveforms, ...
+            txWaveforms = obj.radiator(txBits, ...
                 repmat([0; 0], 1, obj.numTxElements_row * obj.numTxElements_col), conj(W));
             
 %             %% Generate responses
 %             respAtAngle = obj.array_response(obj.center_frequency, toRxAngle, W);
             
+            %% Amplify those signals through transmitter
+            txWaveforms = obj.transmitter(txWaveforms);
+
             %% Visualizations
             if obj.visualization
                 scanAz = -180 : 180;
@@ -128,7 +129,6 @@ classdef s_phased_tx < matlab.System
         function resetImpl(obj)
             release(obj.transmitter);
             release(obj.radiator);
-            release(obj.array_response);
         end
     end
 end

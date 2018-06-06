@@ -1,11 +1,11 @@
 % Usage example of the generated MCSPERTable:
 %   snr = 6;   % Evaluating 1dB SNR
-%   mcs = 8;  % Frame is configured using mcs 13
+%   mcs = 8;  % Frame is configured using mcs 8
 %   % The output of this script returns the statistical PER, in percent
 %   mcsTable.MCSPERTable(snr==mcsTable.snrRange,mcs==mcsTable.mcsRange)
 
-T = readtable('./PER_TABLES/CDL_ALL_DelaySpread16ns.txt');
-profile = 'CDL-B';
+T = readtable('./PER_TABLES/CDL_ALL_1_MOBILITY.txt');
+profile = 'CDL-A';
 
 mcsTable.snrRange = unique(T.Var3);
 mcsTable.mcsRange = unique(T.Var2);
