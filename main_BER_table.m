@@ -10,8 +10,8 @@ nRx = 1;
 
 tic
 for profile = {'CDL-A', 'CDL-B', 'CDL-C', 'CDL-D', 'CDL-E'}
-    for SNR = 10
-        for MCS = 1
+    for SNR = 0 : 20
+        for MCS = 1 : 12
             tx_phy = s_phy_tx( ...
                 'MCS', MCS, ...
                 'PSDULength', lengthPSDU);
@@ -22,10 +22,11 @@ for profile = {'CDL-A', 'CDL-B', 'CDL-C', 'CDL-D', 'CDL-E'}
                 'numOutputElements_col',    1, ...
                 'SNR',                      SNR, ...
                 'applyPathLoss',            false, ...
-                'profile',                  cell2mat(profile));
+                'profile',                  cell2mat(profile), ...
+                'seed',                     randi([1000, 10000]));
             rx_phy = s_phy_rx();
             
-            totPkt = 1;
+            totPkt = 1000;
             numError = 0;
             
             for i = 1 : totPkt

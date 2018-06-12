@@ -10,6 +10,7 @@ classdef s_phased_channel < matlab.System
         center_frequency = 60.48e9;
         applyPathLoss = false;
         profile = 'CDL-C';
+        seed = 123;
     end
         
     properties(Access = private)
@@ -40,6 +41,7 @@ classdef s_phased_channel < matlab.System
             cdlChan.DelaySpread = 16e-9;
             cdlChan.CarrierFrequency = obj.center_frequency;
             cdlChan.MaximumDopplerShift = (0 / 3.6) / physconst('lightspeed') * obj.center_frequency; % 0km/h pedestrian
+            cdlChan.Seed = obj.seed;
             
             obj.CDLChannel = cdlChan;
             
