@@ -5,7 +5,7 @@
 %   mcsTable.MCSPERTable(snr==mcsTable.snrRange,mcs==mcsTable.mcsRange)
 
 T = readtable('./PER_TABLES/CDL_ALL_DelaySpread16ns.txt');
-profile = 'CDL-B';
+profile = 'CDL-C';
 
 mcsTable.snrRange = unique(T.Var3);
 mcsTable.mcsRange = unique(T.Var2);
@@ -26,11 +26,13 @@ for mcs = 1 : length(mcsTable.mcsRange)
     hold on;
 end
 grid on;
-xlabel('SNR (dB)');
-ylabel('PER');
+xlabel('SNR (dB)', 'FontSize', 16);
+ylabel('PER', 'FontSize', 16);
 dataStr = arrayfun(@(x)sprintf('MCS %d', x), mcsTable.mcsRange,'UniformOutput',false);
 legend(dataStr, 'Location', 'best');
-title(['PER for DMG SC-PHY with 3GPP TR 38.901 Channel, ', profile]);
+title(['PER for DMG SC-PHY with 3GPP TR 38.901 Channel, ', profile], 'FontSize', 18);
 
 xlim([0 20])
 ylim([1e-4 1e0])
+xt = get(gca, 'XTick');
+set(gca, 'FontSize', 16)
