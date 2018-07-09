@@ -5,7 +5,7 @@
 %   mcsTable.MCSPERTable(snr==mcsTable.snrRange,mcs==mcsTable.mcsRange)
 
 T = readtable('./PER_TABLES/CDL_ALL_DelaySpread16ns.txt');
-profile = 'CDL-C';
+profile = 'CDL-D';
 
 mcsTable.snrRange = unique(T.Var3);
 mcsTable.mcsRange = unique(T.Var2);
@@ -19,7 +19,7 @@ mcsTable.MCSPERTable = reshape(tempTable(:, 3), length(mcsTable.mcsRange), lengt
 markers = 'ox*sd^v><ph+';
 color = 'bmcrgbrkymcr';
 figure;
-set(gcf, 'Position', [100, 100, 800, 600])
+set(gcf, 'Position', [100, 100, 1000, 800])
 
 for mcs = 1 : length(mcsTable.mcsRange)
     semilogy(mcsTable.snrRange, mcsTable.MCSPERTable(:, mcsTable.mcsRange(mcs))/100, ['-' markers(mcs) color(mcs)], 'LineWidth', 2);

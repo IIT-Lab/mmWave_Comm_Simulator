@@ -2,7 +2,7 @@ function test()
 
 clc; clear all; close all;
 load('testPER_Temp.mat');
-
+addpath('./Plugins/');
 c = physconst('LightSpeed');
 fc = 60e9;
 lambda = c / fc;
