@@ -84,7 +84,7 @@ end
 
 goodPkt = 0;
 
-parfor nPkt = 1 : totPkt
+for nPkt = 1 : totPkt
     
     psdu = cell(nUsers, 1);
     txWaveforms = cell(nUsers, 1);
