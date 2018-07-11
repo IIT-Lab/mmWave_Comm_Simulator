@@ -2,50 +2,45 @@
 % Make sure the following requirement is met:
 % ceil(sqrt(problem.N_Antennas)) > problem.nUsers
 
-clear; clc; close all;
+clear; clc; close all; warning ('off','all');
 addpath('../mmWave-MU-MIMO');
 addpath('../mmWave-MU-MIMO/utilities');
 addpath('../mmWave-MU-MIMO/data');
 addpath('../mmWave-MU-MIMO/PER_TABLES');
-addpath('lte5g');
-addpath('Codes');
+addpath('./Plugins/');
 
 problem = o_read_input_problem('../mmWave-MU-MIMO/data/metaproblem_test.dat');
+problem.DEBUG = false;
 conf = o_read_config('../mmWave-MU-MIMO/data/config_test.dat');
 conf.verbosity = 0;
 
-totPkt = 1;
+totPkt = 200;
 psduLength = 128;
-
-problem.nUsers = 4;
 cdlProfile = {'CDL-A', 'CDL-B', 'CDL-C', 'CDL-D', 'CDL-E'};
-% ant = [16 64 144 256];
-ant = 16;
+nAntenna = 64;
 
-PER_LCMV = zeros(5, 4);
-PER_CBF = zeros(5, 4);
-PER_HEU = zeros(5, 4);
+nUserList = [2, 4, 8];
+
+PER_LCMV = zeros(length(cdlProfile), length(nUserList));
+PER_CBF = zeros(length(cdlProfile), length(nUserList));
+PER_HEU = zeros(length(cdlProfile), length(nUserList));
 
 expID = 1; % stands for LCMV etc
 % expID = 2; % stands for Heuristics
 
-candSet = 1 : problem.nUsers;
-PSDULENGTH = psduLength * ones(1, problem.nUsers);
 
 for i = 1 : length(cdlProfile)
-    for j = 1 : length(ant)
+    for j = 1 : length(nUserList)
         
-        problem.N_Antennas = ant(j);
+        problem.nUsers = nUserList(j);
+        problem.N_Antennas = nAntenna;
         problem.MinObjF = 1.*ones(1,problem.nUsers);
+        problem.NxPatch = sqrt(nAntenna);
+        problem.NyPatch = sqrt(nAntenna);
         conf.DelayProfile = cell2mat(cdlProfile(i));
         
-        if ant(j) == 32
-            problem.NxPatch = 8;
-            problem.NyPatch = 4;
-        else
-            problem.NxPatch = sqrt(ant(j));
-            problem.NyPatch = sqrt(ant(j));
-        end
+        candSet = 1 : problem.nUsers;
+        PSDULENGTH = psduLength * ones(1, problem.nUsers);
         
         [problem,~,~] = f_configuration(conf,problem);
         
@@ -61,7 +56,7 @@ for i = 1 : length(cdlProfile)
             % Evaluate PER
             PER_LCMV(i, j) = f_PER_trd(candSet, problem, W_LCMV, PSDULENGTH, MCS_LCMV, problem.fullChannels, arrayHandle_old, totPkt);
             PER_CBF(i, j) = f_PER_trd(candSet, problem, W_CBF, PSDULENGTH, MCS_CBF, problem.fullChannels, arrayHandle_old, totPkt);
-            fprintf('Solved for %d antenna, profile = %s, PER_LCMV = %.3f, PER_CBF = %.3f\n', ant(j), cell2mat(cdlProfile(i)), PER_LCMV(i, j), PER_CBF(i, j));
+            fprintf('Solved for %d user, profile = %s, PER_LCMV = %.3f, PER_CBF = %.3f\n', nUserList(j), cell2mat(cdlProfile(i)), PER_LCMV(i, j), PER_CBF(i, j));
         else
             % Call Beamforming
             [sol_found,W_heu,arrayHandle_heu,estObj] = f_heuristics(problem,conf,candSet);
@@ -71,7 +66,7 @@ for i = 1 : length(cdlProfile)
             if ~sol_found; disp('Solution not found, results may be unstable!'); end
             % Evaluate PER
             PER_HEU(i, j) = f_PER_stats(candSet, problem, W_heu, PSDULENGTH, MCS, problem.fullChannels, arrayHandle_heu, totPkt);
-            fprintf('Solved for %d antenna, PER_HEU = %.3f\n', ant(j), PER_HEU(i, j));
+            fprintf('Solved for %d user, PER_HEU = %.3f\n', nUserList(j), PER_HEU(i, j));
         end
     end
     
