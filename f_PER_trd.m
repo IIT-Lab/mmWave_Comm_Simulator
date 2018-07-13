@@ -113,7 +113,7 @@ parfor nPkt = 1 : totPkt
     end
     
     for outer_iter = 1 : nUsers
-        combined_tx_waveforms = sqrt(response(outer_iter, outer_iter)) * [txWaveforms{outer_iter}; zeros(maximumSize - length(txWaveforms{outer_iter}), nTx_row * nTx_col)];
+        combined_tx_waveforms = [txWaveforms{outer_iter}; zeros(maximumSize - length(txWaveforms{outer_iter}), nTx_row * nTx_col)];
         for inner_iter = 1 : nUsers
             if inner_iter ~= outer_iter
                 combined_tx_waveforms = combined_tx_waveforms + ...
