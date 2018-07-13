@@ -61,8 +61,8 @@ for i = 1 : length(cdlProfile)
             MCS_LCMV = mcsIndex * ones(1, nUserList(j));
             MCS_CBF = mcsIndex * ones(1, nUserList(j));
             % Evaluate PER
-            PER_LCMV(i, j) = f_PER_trd(candSet, problem, W_LCMV, PSDULENGTH, MCS_LCMV, problem.fullChannels, arrayHandle_old, totPkt);
-            PER_CBF(i, j) = f_PER_trd(candSet, problem, W_CBF, PSDULENGTH, MCS_CBF, problem.fullChannels, arrayHandle_old, totPkt);
+            PER_LCMV(i, j) = f_PER_stats(candSet, problem, W_LCMV, PSDULENGTH, MCS_LCMV, problem.fullChannels, arrayHandle_old, totPkt);
+            PER_CBF(i, j) = f_PER_stats(candSet, problem, W_CBF, PSDULENGTH, MCS_CBF, problem.fullChannels, arrayHandle_old, totPkt);
             fprintf('Solved for %d user, profile = %s, PER_LCMV = %.3f, PER_CBF = %.3f\n', nUserList(j), cell2mat(cdlProfile(i)), PER_LCMV(i, j), PER_CBF(i, j));
         else
             % Call Beamforming
@@ -70,7 +70,7 @@ for i = 1 : length(cdlProfile)
             for iter = 1 : 5
                 [~,W_heu,arrayHandle_heu,~] = f_heuristics(problem,conf,candSet);
                 MCS_heu = mcsIndex * ones(1, nUserList(j));
-                perTemp(iter) = f_PER_trd(candSet, problem, W_heu, PSDULENGTH, MCS_heu, problem.fullChannels, arrayHandle_heu, totPkt);
+                perTemp(iter) = f_PER_stats(candSet, problem, W_heu, PSDULENGTH, MCS_heu, problem.fullChannels, arrayHandle_heu, totPkt);
             end
             PER_HEU(i, j) = min(perTemp);
 %             [~,~,~,SNRList]  = f_BF_results(W_heu,arrayHandle_heu,problem,conf,false);
