@@ -9,7 +9,7 @@ problem = o_read_input_problem('../mmWave-MU-MIMO/data/metaproblem_test.dat');
 problem.DEBUG = false;
 conf = o_read_config('../mmWave-MU-MIMO/data/config_test.dat');
 % overwrite configurations...
-conf.verbosity = 1;
+conf.verbosity = 0;
 conf.NumPhaseShifterBits = 0;                                       % Number of bits to control heuristic solution
 conf.FunctionTolerance_Data = 1e-10;                                % Heuristics stops when not improving solution by this much
 conf.PopSizeList = 30;                                              % Number of genes in heuristics
