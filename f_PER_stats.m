@@ -1,4 +1,4 @@
-function PER = f_PER_trd(candSet, problem, W, TXbits, MCS, channel_handles, array_handle, totPkt)
+function PER = f_PER_stats(candSet, problem, W, TXbits, MCS, channel_handles, array_handle, totPkt)
 %This function conduct communication layer experiments
 % Syntax:  see function definition
 %
