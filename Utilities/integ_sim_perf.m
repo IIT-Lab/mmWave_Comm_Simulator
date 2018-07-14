@@ -1,23 +1,30 @@
-clear; close all; clc;
+clc; clear all; close all;
 
-nUser = [2 4];
-UserExp_TRD = load('./SIM_PERF/USER_PER_EXP_TRD.mat', 'PER_LCMV', 'PER_CBF');
-UserExp_HEU = load('./SIM_PERF/USER_PER_EXP_HEU.mat', 'PER_HEU');
+load('../SIM_PERF/USER_PER_EXP_TRD_64_MCS_1.mat');
 
-nAnt = [16 32];
-AntExp_TRD = load('./SIM_PERF/ANTENNA_PER_EXP_TRD.mat', 'PER_LCMV', 'PER_CBF');
-AntExp_HEU = load('./SIM_PERF/ANTENNA_PER_EXP_HEU.mat', 'PER_HEU');
+figure
+bar(PER_LCMV)
+xticklabels(cdlProfile)
+legend({'2 Users', '4 Users', '8 Users'})
+title(['PER of LCMV, ' num2str(nAntenna) ' antenna'])
 
+figure
+bar(PER_CBF)
+xticklabels(cdlProfile)
+legend({'2 Users', '4 Users', '8 Users'})
+title(['PER of CBF, ' num2str(nAntenna) ' antenna'])
 
-UserExp_data = [UserExp_TRD.PER_CBF; UserExp_TRD.PER_LCMV; UserExp_HEU.PER_HEU]';
-AntExp_data = [AntExp_TRD.PER_CBF; AntExp_TRD.PER_LCMV; AntExp_HEU.PER_HEU]';
+load('../SIM_PERF/USER_PER_EXP_TRD_144_MCS_1.mat');
 
-figure(1)
-bar(nUser, UserExp_data(1:2, :))
-legend('CBF', 'LCMV', 'HEU');
-title('#User vs PER, 64 antenna')
+figure
+bar(PER_LCMV)
+xticklabels(cdlProfile)
+legend({'2 Users', '3 Users', '4 Users', '6 Users'})
+title(['PER of LCMV, ' num2str(nAntenna) ' antenna'])
 
-figure(2)
-bar(nAnt, AntExp_data(1:2, :))
-legend('CBF', 'LCMV', 'HEU');
-title('#Antenna vs PER, 4 users')
+figure
+bar(PER_CBF)
+xticklabels(cdlProfile)
+legend({'2 Users', '3 Users', '4 Users', '6 Users'})
+title(['PER of CBF, ' num2str(nAntenna) ' antenna'])
+
