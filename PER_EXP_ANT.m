@@ -24,43 +24,44 @@ conf.Maxgenerations_Data = 150;                                     % Maximum ge
 conf.EliteCount_Data = ceil(conf.PopulationSize_Data/5);            % Number of genes unchanged from one generation to the next
 conf.MaxStallgenerations_Data = ceil(conf.Maxgenerations_Data/4);   % Stop if fitness value does not improve
 
-totPkt = 200;
+totPkt = 1;
 psduLength = 128;
 cdlProfile = {'CDL-A', 'CDL-B', 'CDL-C', 'CDL-D', 'CDL-E'};
-nAntenna = 128;
+nUsers = 4;
 mcsIndex = 1;
 
-nUserList = [2, 3, 4, 6];
+nAntennaList = [16, 32, 64, 128, 144];
 
-PER_LCMV = zeros(length(cdlProfile), length(nUserList));
-PER_CBF = zeros(length(cdlProfile), length(nUserList));
-PER_HEU = zeros(length(cdlProfile), length(nUserList));
+PER_LCMV = zeros(length(cdlProfile), length(nAntennaList));
+PER_CBF = zeros(length(cdlProfile), length(nAntennaList));
+PER_HEU = zeros(length(cdlProfile), length(nAntennaList));
 
 expID = 1;    % stands for LCMV etc
 % expID = 2;      % stands for Heuristics
 
+
 for i = 1 : length(cdlProfile)
-    for j = 1 : length(nUserList)
+    for j = 1 : length(nAntennaList)
         
         % overwrite configurations...
-        problem.nUsers = nUserList(j);
-        problem.N_Antennas = nAntenna;
+        problem.nUsers = nUsers;
+        problem.N_Antennas = nAntennaList(j);
         problem.MinObjF = 1.*ones(1,problem.nUsers);
         
-        if nAntenna == 32
+        if nAntennaList(j) == 32
             problem.NxPatch = 8;
             problem.NyPatch = 4;
-        elseif nAntenna == 128
+        elseif nAntennaList(j) == 128
             problem.NxPatch = 16;
             problem.NyPatch = 8;
         else
-            problem.NxPatch = sqrt(nAntenna);
-            problem.NyPatch = sqrt(nAntenna);
+            problem.NxPatch = sqrt(nAntennaList(j));
+            problem.NyPatch = sqrt(nAntennaList(j));
         end
         conf.DelayProfile = cell2mat(cdlProfile(i));
         
-        candSet = 1 : problem.nUsers;
-        PSDULENGTH = psduLength * ones(1, problem.nUsers);
+        candSet = 1 : nUsers;
+        PSDULENGTH = psduLength * ones(1, nUsers);
         
         [problem,~,~] = f_configuration(conf, problem);
         
@@ -68,32 +69,32 @@ for i = 1 : length(cdlProfile)
             % Call Beamforming
             [W_LCMV,W_CBF,arrayHandle_old,estObj_LCMV,estObj_CBF] = ...
                 f_conventionalBF(problem,conf,candSet);
-            MCS_LCMV = mcsIndex * ones(1, nUserList(j));
-            MCS_CBF = mcsIndex * ones(1, nUserList(j));
+            MCS_LCMV = mcsIndex * ones(1, nUsers);
+            MCS_CBF = mcsIndex * ones(1, nUsers);
             % Evaluate PER
             PER_LCMV(i, j) = f_PER_stats(candSet, problem, W_LCMV, PSDULENGTH, MCS_LCMV, problem.fullChannels, arrayHandle_old, totPkt);
             PER_CBF(i, j) = f_PER_stats(candSet, problem, W_CBF, PSDULENGTH, MCS_CBF, problem.fullChannels, arrayHandle_old, totPkt);
-            fprintf('Solved for %d user, profile = %s, PER_LCMV = %.3f, PER_CBF = %.3f\n', nUserList(j), cell2mat(cdlProfile(i)), PER_LCMV(i, j), PER_CBF(i, j));
+            fprintf('Solved for %d antenna, profile = %s, PER_LCMV = %.3f, PER_CBF = %.3f\n', nAntennaList(j), cell2mat(cdlProfile(i)), PER_LCMV(i, j), PER_CBF(i, j));
         else
             % Call Beamforming
             [~,W_heu,arrayHandle_heu,~] = f_heuristics(problem,conf,candSet);
-            MCS_heu = mcsIndex * ones(1, nUserList(j));
+            MCS_heu = mcsIndex * ones(1, nUsers);
             PER_HEU(i, j) = f_PER_stats(candSet, problem, W_heu, PSDULENGTH, MCS_heu, problem.fullChannels, arrayHandle_heu, totPkt);
-            fprintf('Solved for %d user, profile = %s, PER_HEU = %.3f\n', nUserList(j), cell2mat(cdlProfile(i)), PER_HEU(i, j));
+            fprintf('Solved for %d user, profile = %s, PER_HEU = %.3f\n', nAntennaList(j), cell2mat(cdlProfile(i)), PER_HEU(i, j));
         end
     end
     
     if expID == 1
-        save(['USER_PER_TRD_' num2str(nAntenna) '_ANT_' num2str(mcsIndex) '_MCS.mat']);
+        save(['ANT_PER_TRD_' num2str(nUsers) '_USERS_' num2str(mcsIndex) '_MCS.mat']);
     else
-        save(['USER_PER_HEU_' num2str(nAntenna) '_ANT_' num2str(mcsIndex) '_MCS.mat']);
+        save(['ANT_PER_HEU_' num2str(nUsers) '_USERS_' num2str(mcsIndex) '_MCS.mat']);
     end
     
 end
 
 if expID == 1
-    save(['USER_PER_TRD_' num2str(nAntenna) '_ANT_' num2str(mcsIndex) '_MCS.mat']);
+    save(['ANT_PER_TRD_' num2str(nUsers) '_USERS_' num2str(mcsIndex) '_MCS.mat']);
 else
-    save(['USER_PER_HEU_' num2str(nAntenna) '_ANT_' num2str(mcsIndex) '_MCS.mat']);
+    save(['ANT_PER_HEU_' num2str(nUsers) '_USERS_' num2str(mcsIndex) '_MCS.mat']);
 end
 
