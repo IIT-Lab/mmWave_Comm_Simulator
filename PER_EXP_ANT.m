@@ -24,7 +24,7 @@ conf.Maxgenerations_Data = 150;                                     % Maximum ge
 conf.EliteCount_Data = ceil(conf.PopulationSize_Data/5);            % Number of genes unchanged from one generation to the next
 conf.MaxStallgenerations_Data = ceil(conf.Maxgenerations_Data/4);   % Stop if fitness value does not improve
 
-totPkt = 1;
+totPkt = 200;
 psduLength = 128;
 cdlProfile = {'CDL-A', 'CDL-B', 'CDL-C', 'CDL-D', 'CDL-E'};
 nUsers = 4;
