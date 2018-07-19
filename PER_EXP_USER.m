@@ -30,7 +30,7 @@ cdlProfile = {'CDL-A', 'CDL-B', 'CDL-C', 'CDL-D', 'CDL-E'};
 nAntenna = 128;
 mcsIndex = 1;
 
-nUserList = [2, 3, 4, 6];
+nUserList = [2, 4, 8];
 
 PER_LCMV = zeros(length(cdlProfile), length(nUserList));
 PER_CBF = zeros(length(cdlProfile), length(nUserList));
