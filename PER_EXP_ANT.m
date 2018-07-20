@@ -80,7 +80,7 @@ for i = 1 : length(cdlProfile)
             [~,W_heu,arrayHandle_heu,~] = f_heuristics(problem,conf,candSet);
             MCS_heu = mcsIndex * ones(1, nUsers);
             PER_HEU(i, j) = f_PER_stats(candSet, problem, W_heu, PSDULENGTH, MCS_heu, problem.fullChannels, arrayHandle_heu, totPkt);
-            fprintf('Solved for %d user, profile = %s, PER_HEU = %.3f\n', nAntennaList(j), cell2mat(cdlProfile(i)), PER_HEU(i, j));
+            fprintf('Solved for %d antenna, profile = %s, PER_HEU = %.3f\n', nAntennaList(j), cell2mat(cdlProfile(i)), PER_HEU(i, j));
         end
     end
     
