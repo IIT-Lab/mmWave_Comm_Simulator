@@ -2,6 +2,9 @@ clear; clc; close all; warning ('off','all');
 
 [~, hostmachine] = system('hostname');
 
+% To run this program faster, it is suggested to use computer that has more
+% than 48G of memory, and don't open up more than 4 concurrent workers
+% (might blow up memory)
 % if strcmp(hostmachine, 'Zeta') || strcmp(hostmachine, 'Iota')
 %     error('Do not run on other machines except for Zeta and Iota!')
 % end
@@ -26,7 +29,7 @@ conf.MaxStallgenerations_Data = ceil(conf.Maxgenerations_Data/4);   % Stop if fi
 
 totPkt = 200;
 psduLength = 128;
-cdlProfile = {'CDL-A', 'CDL-B', 'CDL-C', 'CDL-D', 'CDL-E'};
+cdlProfile = {'CDL-C'};
 nAntenna = 128;
 mcsIndex = 1;
 
@@ -38,6 +41,8 @@ PER_HEU = zeros(length(cdlProfile), length(nUserList));
 
 expID = 1;    % stands for LCMV etc
 % expID = 2;      % stands for Heuristics
+
+overwriteLocation = true;
 
 for i = 1 : length(cdlProfile)
     for j = 1 : length(nUserList)
@@ -65,15 +70,19 @@ for i = 1 : length(cdlProfile)
         [problem,~,~] = f_configuration(conf, problem);
         
         if expID == 1
+            if overwriteLocation
+                problem.phiUsers = randi([-180 180], 1, problem.nUsers);   % Azimuth
+                problem.thetaUsers = randi([-90 90], 1, problem.nUsers);   % Elevation
+            end
             % Call Beamforming
             [W_LCMV,W_CBF,arrayHandle_old,estObj_LCMV,estObj_CBF] = ...
                 f_conventionalBF(problem,conf,candSet);
             MCS_LCMV = mcsIndex * ones(1, nUserList(j));
-            MCS_CBF = mcsIndex * ones(1, nUserList(j));
+%             MCS_CBF = mcsIndex * ones(1, nUserList(j));
             % Evaluate PER
             PER_LCMV(i, j) = f_PER_stats(candSet, problem, W_LCMV, PSDULENGTH, MCS_LCMV, problem.fullChannels, arrayHandle_old, totPkt);
-            PER_CBF(i, j) = f_PER_stats(candSet, problem, W_CBF, PSDULENGTH, MCS_CBF, problem.fullChannels, arrayHandle_old, totPkt);
-            fprintf('Solved for %d user, profile = %s, PER_LCMV = %.3f, PER_CBF = %.3f\n', nUserList(j), cell2mat(cdlProfile(i)), PER_LCMV(i, j), PER_CBF(i, j));
+%             PER_CBF(i, j) = f_PER_stats(candSet, problem, W_CBF, PSDULENGTH, MCS_CBF, problem.fullChannels, arrayHandle_old, totPkt);
+            fprintf('Solved for %d user, profile = %s, PER_LCMV = %.3f\n', nUserList(j), cell2mat(cdlProfile(i)), PER_LCMV(i, j));
         else
             % Call Beamforming
             [~,W_heu,arrayHandle_heu,~] = f_heuristics(problem,conf,candSet);
