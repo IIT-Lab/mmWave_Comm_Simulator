@@ -84,7 +84,7 @@ end
 
 goodPkt = 0;
 
-parfor nPkt = 1 : totPkt
+for nPkt = 1 : totPkt
     
     psdu = cell(nUsers, 1);
     txWaveforms = cell(nUsers, 1);
@@ -123,8 +123,8 @@ parfor nPkt = 1 : totPkt
         end
         
         txWaveforms_afterChannel = channel(combined_tx_waveforms, channel_handles{outer_iter}, distance_3d(outer_iter), distance_2d(outer_iter));
-        rxSymbols = rx_pha(txWaveforms_afterChannel, angleToRx(outer_iter));
-        [psdu_rx, rxflag] = rx_phy(rxSymbols, cfgDMG);
+%         rxSymbols = rx_pha(txWaveforms_afterChannel, angleToRx(outer_iter));
+        [psdu_rx, rxflag] = rx_phy(txWaveforms_afterChannel, cfgDMG);
         
         if ~isempty(psdu_rx)
             gothrough = ~(any(biterr(psdu{outer_iter}, psdu_rx)) && rxflag);
