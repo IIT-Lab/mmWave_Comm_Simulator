@@ -1,6 +1,12 @@
-# mmWave_Dev -- Daily dev branch -- will push if tested fully
+# mmWave communication simulator with beamforming
 
-# Pending tasks
+The purpose of this simulator is to evaluate PHY layer performance (mainly PER) for different beamforming algorithm, under the 3GPP TR 38.901 channel.
+
+## Technical details
+
+Technical details can be found in [here](https://github.com/zhengnanlee/mmWave_Comm_Simulator/blob/master/thesis.pdf)
+
+## Pending tasks
 
 * Multiple receiver elements? i.e., MIMO?
 
@@ -8,7 +14,7 @@
 
 * Quantization effects -- modeling?
 
-# Finished tasks
+## Finished tasks
 
 * Channel: built-in profile (3GPP TR38.901 CDL-C/D) vs custimized (perhaps from Rapapport?) 
 
